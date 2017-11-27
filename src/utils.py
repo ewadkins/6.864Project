@@ -15,8 +15,14 @@ class Sample:
                 '}'
 
 # Returns Samples from the given filepath
-def load_data(filepath):
+def load_samples(filepath):
     with open(filepath, 'r') as f:
         samples = [line.strip() for line in f.readlines()]
         return map(lambda x: Sample(*map(lambda (i, y):
                                          y.split() if i != 0 else y, enumerate(x.split('\t')))), samples)
+
+def load_corpus(filepath):
+    with open(filepath, 'r') as f:
+        corpus = [line.strip() for line in f.readlines()]
+        corpus = map(lambda x: x.split('\t'), corpus)
+        return {x[0]: tuple(x[1:]) for x in corpus}
