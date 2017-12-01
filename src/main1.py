@@ -106,8 +106,8 @@ input_size = 200 # size of word embedding
 hidden_sizes = [300, 200, 150] # sizes of the convolutional layers; determines # of conv layers
 output_size = 100 # size of state vector
 
-kernel_sizes = [5, 4, 3] # NOTE: assert len(kernel_sizes) == len(kernel_sizes)
-pooling_sizes = [2, 2, 2] # NOTE: assert len(pooling_sizes) == len(kernel_sizes)
+kernel_sizes = [5, 4, 3] # NOTE: assert len(kernel_sizes) == len(hidden_sizes)
+pooling_sizes = [2, 2, 2] # NOTE: assert len(pooling_sizes) == len(hidden_sizes)
 
 learning_rate = 1e-1;
 
