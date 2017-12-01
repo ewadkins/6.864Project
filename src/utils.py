@@ -42,7 +42,19 @@ def load_embeddings(filepath):
                                        float(y) if i != 0 else y, enumerate(x.split())), embeddings)
         return {x[0]: tuple(x[1:]) for x in embeddings}
 
+def store_embedding_map(_embedding_map):
+    global embedding_map
+    embedding_map = _embedding_map
+    
+def store_question_map(_question_map):
+    global question_map
+    question_map = _question_map
+
 # Maps a string of words to an array of word embeddings, shape(num_words, embedding_length)
-def get_embeddings(string, embedding_map):
+def get_embeddings(string):
     return np.array(map(lambda x: embedding_map[x],
                         filter(lambda x: x in embedding_map, string.split())))
+
+# Maps a question id to its (title, body)
+def get_question(id):
+    return question_map[id]
