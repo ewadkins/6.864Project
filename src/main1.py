@@ -73,7 +73,6 @@ print rcnn
 print 
 
 #################################################
-#################################################
 # LSTM configuration
 
 lstm_input_size = 200
@@ -96,6 +95,8 @@ print
 training_samples, dev_samples, test_samples, question_map, embedding_map = init();
 
 #################################################
+# MAIN                                          #
+#################################################
 
 #title, body = question_map[training_samples[0].id]
 #print title
@@ -105,6 +106,7 @@ training_samples, dev_samples, test_samples, question_map, embedding_map = init(
 
 # NOTE: Trains with RCNN without batching
 #train.train(rcnn, encode.encode_rcnn, training_samples, rcnn_learning_rate, display_callback)
+
 
 
 #title, body = question_map[training_samples[0].id]
@@ -117,6 +119,7 @@ training_samples, dev_samples, test_samples, question_map, embedding_map = init(
 #train.train(lstm, encode.encode_lstm, training_samples, lstm_learning_rate, display_callback)
 
 
+
 #batch_ids = [training_samples[0].id] + list(sample.candidate_map.keys())
 #embeddings_batch = map(lambda id: 
 #                       utils.get_embeddings(question_map[training_samples[0].id][0], embedding_map),
@@ -127,3 +130,4 @@ training_samples, dev_samples, test_samples, question_map, embedding_map = init(
 
 # NOTE: Trains with LSTM with batching
 train.train_batch(lstm, encode.encode_lstm_batch, training_samples, lstm_learning_rate, display_callback)
+
