@@ -104,7 +104,7 @@ training_samples, dev_samples, test_samples, question_map, embedding_map = init(
 #encoded = encode.encode_rcnn(rcnn, embeddings)
 #print encoded
 
-# NOTE: Trains with RCNN without batching
+# NOTE: Trains RCNN without batching
 #train.train(rcnn, encode.encode_rcnn, training_samples, rcnn_learning_rate, display_callback)
 
 
@@ -115,7 +115,7 @@ training_samples, dev_samples, test_samples, question_map, embedding_map = init(
 #encoded = encode.encode_lstm(lstm, embeddings)
 #print encoded
 
-# NOTE: Trains with LSTM without batching
+# NOTE: Trains LSTM without batching
 #train.train(lstm, encode.encode_lstm, training_samples, lstm_learning_rate, display_callback)
 
 
@@ -128,6 +128,6 @@ training_samples, dev_samples, test_samples, question_map, embedding_map = init(
 #encoded_batch = encode.encode_lstm_batch(lstm, embeddings_batch)
 #print np.shape(encoded_batch)
 
-# NOTE: Trains with LSTM with batching
+# NOTE: Trains LSTM with batching
 train.train_batch(lstm, encode.encode_lstm_batch, training_samples, lstm_learning_rate, display_callback)
 
