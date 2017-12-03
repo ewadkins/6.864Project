@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
+import sys
 
 import utils
 
@@ -17,6 +18,8 @@ def evaluate_model(rnn, encode_fn, samples, k=10):
     def get_embeddings(title, body):
         return utils.get_embeddings(title)
 
+    print
+    print 'Evaluating',
     results_matrix = []
     for i in range(len(samples)):
         sample = samples[i]
@@ -24,7 +27,9 @@ def evaluate_model(rnn, encode_fn, samples, k=10):
         if len(embeddings) == 0:
             continue
 
-        print i + 1, '/', len(samples)
+        #print i + 1, '/', len(samples)
+        sys.stdout.write('.')
+        sys.stdout.flush()
 
         results = []
         for candidate_id in sample.candidate_map:
@@ -52,10 +57,10 @@ def evaluate_model(rnn, encode_fn, samples, k=10):
         # print sample.similar
         # print results
         results_matrix.append(results)
-        print 'AP:', average_precision(sample, results)
-        print 'RR:', reciprocal_rank(sample, results)
-        print 'P@' + str(k) + ':', precision_at_k(sample, results, k)
-        print
+        #print 'AP:', average_precision(sample, results)
+        #print 'RR:', reciprocal_rank(sample, results)
+        #print 'P@' + str(k) + ':', precision_at_k(sample, results, k)
+        #print
 
     MAP = mean_average_precision(samples, results_matrix)
     MRR = mean_reciprocal_rank(samples, results_matrix)

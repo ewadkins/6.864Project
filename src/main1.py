@@ -165,14 +165,19 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 
 # NOTE: Trains LSTM with batching
 # train.train_batch(lstm, encode.encode_lstm_batch, training_samples[:100],
-#                  lstm_learning_rate, display_callback)
+#                   lstm_learning_rate, display_callback)
 
 # NOTE: Trains CNN
-train.train_batch_cnn(cnn, encode.encode_cnn, training_samples[:2000],
-                      cnn_learning_rate,
-                      display_callback)
+epoch = 0
+while True:
+    epoch += 1
+    print 'Epoch', epoch
+    train.train_batch(cnn, encode.encode_cnn, training_samples,
+                      cnn_learning_rate, display_callback)
+    evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples)
 
-evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples)
+# NOTE: Trains LSTM
+#train.train_batch(lstm, encode.encode_lstm, training_samples[:2000],
+#                  lstm_learning_rate, display_callback)
+#evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
 
-# EVALUATION EXAMPLE
-# evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
