@@ -11,12 +11,12 @@ import utils
 
 
 def train(
-        rnn,
+        net,
         encode_fn,
         training_samples,
         learning_rate,
         display_callback=None):
-    optimizer = optim.Adam(rnn.parameters(), lr=learning_rate)
+    optimizer = optim.Adam(net.parameters(), lr=learning_rate)
     criterion = nn.CosineEmbeddingLoss()
 
     # Given a title and body, return embeddings to use
@@ -24,7 +24,7 @@ def train(
     def get_embeddings(title, body):
         return utils.get_embeddings(title)
 
-    # rnn.train();
+    # nn.train();
     for i in range(len(training_samples)):
         sample = training_samples[i]
         embeddings = get_embeddings(*utils.get_question(sample.id))
@@ -41,8 +41,8 @@ def train(
             candidate_embeddings = get_embeddings(
                 candidate_title, candidate_body)
 
-            encoded = encode_fn(rnn, embeddings)
-            candidate_encoded = encode_fn(rnn, candidate_embeddings)
+            encoded = encode_fn(net, embeddings)
+            candidate_encoded = encode_fn(net, candidate_embeddings)
 
             # Update
             optimizer.zero_grad()

@@ -11,6 +11,7 @@ import utils
 import train
 import encode
 import rcnn
+import cnn
 import evaluate
 import cnn
 

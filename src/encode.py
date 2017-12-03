@@ -10,6 +10,12 @@ import utils
 # word embeddings
 
 
+def encode_cnn(cnn, embeddings):
+    input = torch.transpose(Variable(
+            torch.FloatTensor(embeddings)), 0, 1).unsqueeze(0)
+    return cnn(input).squeeze()
+
+
 def encode_rcnn(rcnn, embeddings):
     input = Variable(torch.FloatTensor(embeddings))
     hidden = None
