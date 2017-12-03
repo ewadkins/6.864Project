@@ -54,6 +54,7 @@ def init():
     print
 
     utils.store_embedding_map(embedding_map)
+    # IMPORTANT: Make sure to store the correct question map before using utils
     utils.store_question_map(askubuntu_question_map)
 
     return (askubuntu_training_samples, askubuntu_dev_samples, askubuntu_test_samples,
