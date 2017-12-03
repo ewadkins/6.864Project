@@ -155,4 +155,4 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 
 
 # EVALUATION EXAMPLE
-# evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
+evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
