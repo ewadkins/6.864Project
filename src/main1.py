@@ -35,7 +35,7 @@ def init():
     print len(question_map)
 
     print 'Loading embeddings..'
-    embedding_map = utils.load_embeddings('../data/askubuntu/vectors_pruned.200.txt')
+    embedding_map = utils.load_embeddings('../data/pruned_askubuntu_android_vector.txt')
     print len(embedding_map)
     print
 
