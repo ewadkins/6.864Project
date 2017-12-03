@@ -164,14 +164,15 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 # print np.shape(encoded_batch)
 
 # NOTE: Trains LSTM with batching
-# train.train_batch(lstm, encode.encode_lstm_batch, training_samples,
+# train.train_batch(lstm, encode.encode_lstm_batch, training_samples[:100],
 #                  lstm_learning_rate, display_callback)
 
 # NOTE: Trains CNN
-train.train(cnn, encode.encode_cnn, training_samples, cnn_learning_rate,
-            display_callback)
+train.train_batch_cnn(cnn, encode.encode_cnn, training_samples[:2000],
+                      cnn_learning_rate,
+                      display_callback)
 
 evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples)
 
 # EVALUATION EXAMPLE
-evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
+# evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)

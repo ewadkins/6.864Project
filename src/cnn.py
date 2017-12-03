@@ -12,4 +12,4 @@ class LanguageCNN(nn.Module):
 
     def forward(self, x):
         x = F.tanh(self.conv(x))
-        return F.max_pool1d(x, x.size()[-1])
+        return F.avg_pool1d(x, x.size()[-1])
