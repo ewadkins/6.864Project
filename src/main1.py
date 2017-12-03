@@ -11,6 +11,7 @@ import utils
 import train
 import encode
 import rcnn
+import evaluate
 
 #################################################
 # Data loader
@@ -119,12 +120,12 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 # print encoded
 
 # NOTE: Trains RCNN without batching
-train.train(
-    rcnn,
-    encode.encode_rcnn,
-    training_samples,
-    rcnn_learning_rate,
-    display_callback)
+#train.train(
+#    rcnn,
+#    encode.encode_rcnn,
+#    training_samples,
+#    rcnn_learning_rate,
+#    display_callback)
 
 
 # title, body = question_map[training_samples[0].id]
@@ -151,3 +152,7 @@ train.train(
 # NOTE: Trains LSTM with batching
 # train.train_batch(lstm, encode.encode_lstm_batch, training_samples,
 #                  lstm_learning_rate, display_callback)
+
+
+# EVALUATION EXAMPLE
+#evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
