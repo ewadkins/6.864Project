@@ -69,7 +69,7 @@ class RCNN(nn.Module):
         output = output.view(output.size(0), self.hidden_size)
 
         # Output layer
-        output = F.relu(self.out(output))
+        output = F.sigmoid(self.out(output))
 
         reduced = output.mean(0)
 

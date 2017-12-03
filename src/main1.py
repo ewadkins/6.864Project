@@ -120,7 +120,7 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 # print encoded
 
 # NOTE: Trains RCNN without batching
-#train.train(
+# train.train(
 #    rcnn,
 #    encode.encode_rcnn,
 #    training_samples,
@@ -155,4 +155,4 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 
 
 # EVALUATION EXAMPLE
-#evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
+# evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
