@@ -12,6 +12,7 @@ import train
 import encode
 import rcnn
 import evaluate
+import cnn
 
 #################################################
 # Data loader
@@ -104,6 +105,20 @@ print lstm
 print
 
 #################################################
+# CNN configuration
+
+embedding_size = 200
+filter_size = 5
+sequence_state_size = 100
+
+cnn_learning_rate = 1e-1
+
+cnn = cnn.LanguageCNN(embedding_size, filter_size, sequence_state_size)
+
+print cnn
+print
+
+#################################################
 # Data loading
 
 training_samples, dev_samples, test_samples, question_map, embedding_map =\
@@ -151,6 +166,11 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 # train.train_batch(lstm, encode.encode_lstm_batch, training_samples,
 #                  lstm_learning_rate, display_callback)
 
+# NOTE: Trains CNN
+train.train(cnn, encode.encode_cnn, training_samples, cnn_learning_rate,
+            display_callback)
+
+evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples)
 
 # EVALUATION EXAMPLE
 evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
