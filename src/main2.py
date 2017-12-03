@@ -18,21 +18,35 @@ import evaluate
 
 
 def init():
-    print 'Loading training samples..'
-    training_samples = utils.load_samples('../data/askubuntu/train_random.txt')
-    print len(training_samples)
+    print 'Loading askubuntu training samples..'
+    askubuntu_training_samples = utils.load_samples('../data/askubuntu/train_random.txt')
+    print len(askubuntu_training_samples)
 
-    print 'Loading dev samples..'
-    dev_samples = utils.load_samples('../data/askubuntu/dev.txt')
-    print len(dev_samples)
+    print 'Loading askubuntu dev samples..'
+    askubuntu_dev_samples = utils.load_samples('../data/askubuntu/dev.txt')
+    print len(askubuntu_dev_samples)
 
-    print 'Loading test samples..'
-    test_samples = utils.load_samples('../data/askubuntu/test.txt')
-    print len(test_samples)
+    print 'Loading askubuntu test samples..'
+    askubuntu_test_samples = utils.load_samples('../data/askubuntu/test.txt')
+    print len(askubuntu_test_samples)
 
-    print 'Loading corpus..'
-    question_map = utils.load_corpus('../data/askubuntu/text_tokenized.txt')
-    print len(question_map)
+    print 'Loading askubuntu corpus..'
+    askubuntu_question_map = utils.load_corpus('../data/askubuntu/text_tokenized.txt')
+    print len(askubuntu_question_map)
+
+    print 'Loading android dev samples..'
+    android_dev_samples = utils.load_samples_stupid_format(
+        '../data/android/dev.pos.txt', '../data/android/dev.neg.txt')
+    print len(android_dev_samples)
+
+    print 'Loading android test samples..'
+    android_test_samples = utils.load_samples_stupid_format(
+        '../data/android/test.pos.txt', '../data/android/test.neg.txt')
+    print len(android_test_samples)
+
+    print 'Loading android corpus..'
+    android_question_map = utils.load_corpus('../data/android/corpus.tsv')
+    print len(android_question_map)
 
     print 'Loading embeddings..'
     embedding_map = utils.load_embeddings('../data/askubuntu/vectors_pruned.200.txt')
@@ -40,10 +54,11 @@ def init():
     print
 
     utils.store_embedding_map(embedding_map)
-    utils.store_question_map(question_map)
+    utils.store_question_map(askubuntu_question_map)
 
-    return (training_samples,
-            dev_samples, test_samples, question_map, embedding_map)
+    return (askubuntu_training_samples, askubuntu_dev_samples, askubuntu_test_samples,
+            askubuntu_question_map, android_dev_samples, android_test_samples,
+            android_question_map, embedding_map)
 
 
 #################################################
@@ -106,16 +121,18 @@ print
 #################################################
 # Data loading
 
-training_samples, dev_samples, test_samples, question_map, embedding_map =\
-    init()
+(askubuntu_training_samples, askubuntu_dev_samples, askubuntu_test_samples,
+ askubuntu_question_map, android_dev_samples, android_test_samples,
+ android_question_map, embedding_map) = init()
 
 #################################################
 # MAIN                                          #
 #################################################
 
-# title, body = question_map[training_samples[0].id]
+# title, body = android_question_map[android_dev_samples[0].id]
 # print title
-# embeddings = utils.get_embeddings(title, embedding_map)
+# embeddings = utils.get_embeddings(title)
+# print np.shape(embeddings)
 # encoded = encode.encode_rcnn(rcnn, embeddings)
 # print encoded
 
@@ -123,34 +140,34 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 # train.train(
 #    rcnn,
 #    encode.encode_rcnn,
-#    training_samples,
+#    askubuntu_training_samples,
 #    rcnn_learning_rate,
 #    display_callback)
 
 
-# title, body = question_map[training_samples[0].id]
+# title, body = question_map[askubuntu_training_samples[0].id]
 # print title
 # embeddings = utils.get_embeddings(title)
 # encoded = encode.encode_lstm(lstm, embeddings)
 # print encoded
 
 # NOTE: Trains LSTM without batching
-# train.train(lstm, encode.encode_lstm, training_samples, lstm_learning_rate,
+# train.train(lstm, encode.encode_lstm, askubuntu_training_samples, lstm_learning_rate,
 #           display_callback)
 
 
-# batch_ids = [training_samples[0].id] + list(sample.candidate_map.keys())
+# batch_ids = [askubuntu_training_samples[0].id] + list(sample.candidate_map.keys())
 # embeddings_batch = map(lambda id:
-#                       utils.get_embeddings(question_map[training_samples[0].id][0]),
+#                       utils.get_embeddings(question_map[askubuntu_training_samples[0].id][0]),
 #                       batch_ids)
 # print np.shape(embeddings_batch)
 # encoded_batch = encode.encode_lstm_batch(lstm, embeddings_batch)
 # print np.shape(encoded_batch)
 
 # NOTE: Trains LSTM with batching
-# train.train_batch(lstm, encode.encode_lstm_batch, training_samples,
+# train.train_batch(lstm, encode.encode_lstm_batch, askubuntu_training_samples,
 #                  lstm_learning_rate, display_callback)
 
 
 # EVALUATION EXAMPLE
-evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
+#evaluate.evaluate_model(lstm, encode.encode_lstm, askubuntu_dev_samples)

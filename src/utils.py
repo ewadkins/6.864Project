@@ -35,6 +35,23 @@ def load_samples(filepath):
                         x.split('\t')))),
             samples)
 
+
+def load_samples_stupid_format(pos_filepath, neg_filepath):
+    pos_map = {}
+    neg_map = {}
+    with open(pos_filepath, 'r') as f:
+        content = [line.strip() for line in f.readlines()]
+        for pair in map(lambda x: tuple(x.split()), content):
+            pos_map[pair[0]] = pos_map.get(pair[0], []) + [pair[1]]
+    with open(neg_filepath, 'r') as f:
+        content = [line.strip() for line in f.readlines()]
+        for pair in map(lambda x: tuple(x.split()), content):
+            neg_map[pair[0]] = neg_map.get(pair[0], []) + [pair[1]]
+        
+    assert list(sorted(pos_map.keys())) == list(sorted(neg_map.keys()))
+    return map(lambda x: Sample(x, pos_map[x], neg_map[x]), list(sorted(pos_map.keys())))
+    
+
 # Returns a dictionary mapping question id's to their (title, body)
 
 
