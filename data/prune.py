@@ -16,4 +16,4 @@ with open(filepath, 'r') as f:
         for line in f:
             word = line.split()[0]
             if word in relevant_set:
-                tf.write(line + '\n')
+                tf.write(line.strip() + '\n')
