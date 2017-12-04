@@ -73,7 +73,7 @@ def train_batch(
     # Given a title and body, return embeddings to use
     # Currently, only use titles
     def get_embeddings(title, body):
-        return utils.get_embeddings(title + ' ' + body)
+        return utils.get_embeddings(title)
 
     # nn.train();
     for i in range(len(training_samples)):

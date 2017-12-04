@@ -185,3 +185,15 @@ while True:
 #                  lstm_learning_rate, display_callback)
 #evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
 
+#def midpoint_eval(i):
+#    if (i + 1) % 100 == 0:
+#        evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
+#
+## NOTE: Trains CNN
+#epoch = 0
+#while True:
+#    epoch += 1
+#    print 'Epoch', epoch
+#    train.train_batch(lstm, encode.encode_lstm, training_samples,
+#                      lstm_learning_rate, display_callback, midpoint_eval)
+

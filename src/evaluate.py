@@ -60,16 +60,19 @@ def evaluate_model(rnn, encode_fn, samples, k=10):
         #print 'AP:', average_precision(sample, results)
         #print 'RR:', reciprocal_rank(sample, results)
         #print 'P@' + str(k) + ':', precision_at_k(sample, results, k)
+        #print 'AUC' + str(k) + ':', area_under_curve(sample, results)
         #print
 
     MAP = mean_average_precision(samples, results_matrix)
     MRR = mean_reciprocal_rank(samples, results_matrix)
     MPK = mean_precision_at_k(samples, results_matrix, k)
+    MAUC = mean_area_under_curve(samples, results_matrix)
 
     print
     print 'MAP:', MAP
     print 'MRR:', MRR
     print 'MP@' + str(k) + ':', MPK
+    print 'MAUC:', MAUC
     print
 
     return MAP, MRR, MPK
@@ -103,6 +106,17 @@ def average_precision(sample, results):
         total_precision += precision_at_k(sample, results, i + 1)
     return total_precision / len(relevant)
 
+def area_under_curve(sample, results):
+    index_map = {}
+    for i in reversed(range(len(results))):
+        index_map[results[i]] = i
+    count = 0
+    for pos in sample.similar:
+        for neg in sample.dissimilar:
+            if pos in index_map and neg in index_map and index_map[pos] < index_map[neg]:
+                count += 1
+    return count and float(count) / (len(sample.similar) * len(sample.dissimilar))
+
 
 def mean_fn(samples, results_matrix, fn, *varargs):
     x = map(lambda s_r: fn(s_r[0], s_r[1], *varargs),
@@ -117,13 +131,14 @@ def mean_fn(samples, results_matrix, fn, *varargs):
 def mean_reciprocal_rank(samples, results_matrix):
     return mean_fn(samples, results_matrix, reciprocal_rank)
 
-
 def mean_precision_at_k(samples, results_matrix, k):
     return mean_fn(samples, results_matrix, precision_at_k, k)
 
-
 def mean_average_precision(samples, results_matrix):
     return mean_fn(samples, results_matrix, average_precision)
+
+def mean_area_under_curve(samples, results_matrix):
+    return mean_fn(samples, results_matrix, area_under_curve)
 
 
 # training_samples = utils.load_samples('../data/train_random.txt')
