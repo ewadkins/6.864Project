@@ -84,7 +84,7 @@ def train_batch(
         # print
         print i + 1, '/', len(training_samples)
         # print title
-        
+
         encoded_var = encode_fn(net, embeddings).unsqueeze(0)
 
         candidate_ids = list(sample.candidate_map.keys())
@@ -121,7 +121,7 @@ def train_batch(
             callback(i)
         optimizer.step()
 
-#def train_batch_adverserial(
+# def train_batch_adverserial(
 #        net,
 #        encode_fn,
 #        training_samples,
@@ -146,7 +146,7 @@ def train_batch(
 #        # print
 #        print i + 1, '/', len(training_samples)
 #        # print title
-#        
+#
 #        encoded_var = encode_fn(net, embeddings).unsqueeze(0)
 #
 #        candidate_ids = list(sample.candidate_map.keys())
@@ -155,7 +155,8 @@ def train_batch(
 #        candidate_encoded = []
 #        similar_indicators = []
 #        for candidate_id in candidate_ids:
-#            candidate_title, candidate_body = askubuntu_question_map[candidate_id]
+#            candidate_title, candidate_body =\
+#               askubuntu_question_map[candidate_id]
 #            candidate_embeddings = get_embeddings(
 #                candidate_title, candidate_body)
 #            if len(candidate_embeddings) != 0:  # NOTE: Probably do something

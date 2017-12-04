@@ -47,10 +47,14 @@ def load_samples_stupid_format(pos_filepath, neg_filepath):
         content = [line.strip() for line in f.readlines()]
         for pair in map(lambda x: tuple(x.split()), content):
             neg_map[pair[0]] = neg_map.get(pair[0], []) + [pair[1]]
-        
+
     assert list(sorted(pos_map.keys())) == list(sorted(neg_map.keys()))
-    return map(lambda x: Sample(x, pos_map[x], neg_map[x]), list(sorted(pos_map.keys())))
-    
+    return map(
+        lambda x: Sample(
+            x, pos_map[x], neg_map[x]), list(
+            sorted(
+                pos_map.keys())))
+
 
 # Returns a dictionary mapping question id's to their (title, body)
 
@@ -90,11 +94,10 @@ def store_question_map(_question_map):
 # embedding_length)
 
 
-#def get_embeddings(string):
+# def get_embeddings(string):
 #    return np.array(map(lambda x: embedding_map[x],
 #                        filter(lambda x: x in embedding_map, string.split())))
 
 def get_embeddings(string):
-    return np.array(map(lambda x: 
-                        embedding_map[x] if x in embedding_map else [0.0 for _ in range(200)],
-                        string.split()))
+    return np.array(map(lambda x: embedding_map[x] if x in embedding_map else [
+                    0.0 for _ in range(200)], string.split()))

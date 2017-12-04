@@ -12,6 +12,8 @@ import train
 import encode
 import cnn
 import evaluate
+import cnn
+import domain_transfer
 
 #################################################
 # Data loader
@@ -19,7 +21,8 @@ import evaluate
 
 def init():
     print 'Loading askubuntu training samples..'
-    askubuntu_training_samples = utils.load_samples('../data/askubuntu/train_random.txt')
+    askubuntu_training_samples = utils.load_samples(
+        '../data/askubuntu/train_random.txt')
     print len(askubuntu_training_samples)
 
     print 'Loading askubuntu dev samples..'
@@ -31,7 +34,8 @@ def init():
     print len(askubuntu_test_samples)
 
     print 'Loading askubuntu corpus..'
-    askubuntu_question_map = utils.load_corpus('../data/askubuntu/text_tokenized.txt')
+    askubuntu_question_map = utils.load_corpus(
+        '../data/askubuntu/text_tokenized.txt')
     print len(askubuntu_question_map)
 
     print 'Loading android dev samples..'
@@ -49,15 +53,22 @@ def init():
     print len(android_question_map)
 
     print 'Loading embeddings..'
-    embedding_map = utils.load_embeddings('../data/pruned_askubuntu_android_vector.txt')
+    embedding_map = utils.load_embeddings(
+        '../data/pruned_askubuntu_android_vector.txt')
     print len(embedding_map)
     print
 
     utils.store_embedding_map(embedding_map)
 
-    return (askubuntu_training_samples, askubuntu_dev_samples, askubuntu_test_samples,
-            askubuntu_question_map, android_dev_samples, android_test_samples,
-            android_question_map, embedding_map)
+    return (
+        askubuntu_training_samples,
+        askubuntu_dev_samples,
+        askubuntu_test_samples,
+        askubuntu_question_map,
+        android_dev_samples,
+        android_test_samples,
+        android_question_map,
+        embedding_map)
 
 
 #################################################
@@ -98,17 +109,22 @@ print
 #################################################
 # CNN configuration
 
-embedding_size = 200
-filter_size = 5
-hidden_size = 300
-sequence_state_size = 250
-
-cnn_learning_rate = 1e-1
-
-cnn = cnn.LanguageCNN(embedding_size, filter_size, hidden_size, sequence_state_size)
+cnn = cnn.CNN()
 
 print cnn
 print
+
+#################################################
+# CNN Domain Transfer Net Configuration
+# (LSTM domain transfer net can be built the same way)
+
+# cnn or lstm
+feature_extractor = cnn
+
+cnn_domain_transfer_net = domain_transfer.DomainTransferNet(
+    feature_extractor,
+    nn.Linear(667, 667),
+    nn.Linear(667, 2))
 
 #################################################
 # Data loading
@@ -121,7 +137,6 @@ print
 # MAIN                                          #
 #################################################
 
-
 def midpoint_eval(i):
     if (i + 1) % 200 == 0:
         evaluate.evaluate_model(cnn, encode.encode_cnn, askubuntu_dev_samples, askubuntu_question_map)
@@ -129,16 +144,3 @@ def midpoint_eval(i):
 # NOTE: Trains CNN
 train.train_batch(cnn, encode.encode_cnn, askubuntu_training_samples[:100],
                   cnn_learning_rate, askubuntu_question_map, display_callback, midpoint_eval)
-
-
-#print
-#print 'EVALUATION'
-#print
-#print 'Askubuntu dev'
-#evaluate.evaluate_model(cnn, encode.encode_cnn, askubuntu_dev_samples, askubuntu_question_map)
-#print 'Askubuntu test'
-#evaluate.evaluate_model(cnn, encode.encode_cnn, askubuntu_test_samples, askubuntu_question_map)
-#print 'Android dev'
-#evaluate.evaluate_model(cnn, encode.encode_cnn, android_dev_samples, android_question_map)
-#print 'Android dev'
-#evaluate.evaluate_model(cnn, encode.encode_cnn, android_test_samples, android_question_map)
