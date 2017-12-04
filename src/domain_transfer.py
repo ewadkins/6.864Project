@@ -19,7 +19,7 @@ class DomainTransferNet(nn.Module):
         self.label_predictor = label_predictor
         self.domain_classifier = domain_classifier
 
-    def forward(self, x):
+    def forward(self, x, label_classifier=True):
         x = self.feature_extractor(x)
         domain = GradientReversal.apply(x)
         domain = self.domain_classifier(domain)

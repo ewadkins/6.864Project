@@ -80,7 +80,7 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    if len(losses) % 20 == 0:
+    if len(losses) % 50 == 0:
         fig.clear()
         plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
@@ -125,8 +125,9 @@ feature_extractor = cnn
 
 cnn_domain_transfer_net = domain_transfer.DomainTransferNet(
     feature_extractor,
-    nn.Linear(667, 667),
-    nn.Linear(667, 2))
+    #nn.Linear(667, 667),
+    nn.Linear(667, 2),
+    lambda x: x)
 
 #################################################
 # Data loading
@@ -139,16 +140,29 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(
 # MAIN                                          #
 #################################################
 
+
 model = cnn
 encode_fn = encode.encode_cnn
 learning_rate = cnn_learning_rate
 
+print askubuntu_dev_samples[0]
+evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map)
+
 # Trains models
 def midpoint_eval(i):
-    if (i + 1) % 100 == 0:
-        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map)    
-train.train_batch(model, encode_fn, askubuntu_training_samples[:2000],
-                  learning_rate, askubuntu_question_map, display_callback, midpoint_eval)
+    if (i + 1) % 200 == 0:
+        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map) 
+epoch = 0
+while True:
+    epoch += 1
+    print
+    print 'Epoch:', epoch
+    train.train_batch(model, encode_fn, askubuntu_training_samples,
+                      learning_rate, askubuntu_question_map, display_callback, midpoint_eval)
+
+#print askubuntu_dev_samples[6]
+#evaluate.evaluate_model(cnn, encode.encode_cnn, [askubuntu_dev_samples[6]], askubuntu_question_map)
+#1/0
 
 print
 print 'EVALUATION'

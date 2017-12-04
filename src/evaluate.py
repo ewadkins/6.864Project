@@ -53,7 +53,9 @@ def evaluate_model(rnn, encode_fn, samples, question_map):
             results.append((difference, candidate_id))
 
         results.sort()
+        #print results
         results = map(lambda x: x[1], results)
+        #print results
         results_matrix.append(results)
 
     MAP = mean_average_precision(samples, results_matrix)

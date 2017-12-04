@@ -9,9 +9,9 @@ class Sample:
         self.dissimilar = dissimilar
         self.scores = scores and map(float, scores)
         self.candidate_map = {}
-        for similar_id in similar:
+        for similar_id in self.similar:
             self.candidate_map[similar_id] = 1
-        for dissimilar_id in dissimilar:
+        for dissimilar_id in self.dissimilar:
             self.candidate_map[dissimilar_id] = -1
 
     def __repr__(self):

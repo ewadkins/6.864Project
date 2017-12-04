@@ -77,6 +77,9 @@ def train_batch(
         return utils.get_embeddings(title)
 
     # nn.train();
+    encoded = []
+    candidate_encoded = []
+    similar_indicators = []
     for i in range(len(training_samples)):
         sample = training_samples[i]
         embeddings = get_embeddings(*question_map[sample.id])
@@ -87,11 +90,10 @@ def train_batch(
 
         encoded_var = encode_fn(net, embeddings).unsqueeze(0)
 
-        candidate_ids = list(sample.candidate_map.keys())
+        similar_id = sample.similar[int(random.random() * len(sample.similar))]
+        candidate_ids = [similar_id] + sample.dissimilar
+        #candidate_ids = list(sample.candidate_map.keys())
         random.shuffle(candidate_ids)
-        encoded = []
-        candidate_encoded = []
-        similar_indicators = []
         for candidate_id in candidate_ids:
             candidate_title, candidate_body = question_map[candidate_id]
             candidate_embeddings = get_embeddings(
@@ -103,6 +105,7 @@ def train_batch(
                     encode_fn(net, candidate_embeddings).unsqueeze(0))
                 similar_indicators.append(sample.candidate_map[candidate_id])
 
+    if (i + 1) % 10 == 0:
         # Update
         encoded = torch.cat(encoded)
         candidate_encoded = torch.cat(candidate_encoded)
@@ -117,9 +120,9 @@ def train_batch(
         # print loss.data[0]
         if display_callback is not None:
             display_callback(loss.data[0])
-        if callback is not None:
-            callback(i)
         optimizer.step()
+    if callback is not None:
+        callback(i)
 
 # def train_batch_adverserial(
 #        net,
