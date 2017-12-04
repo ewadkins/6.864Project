@@ -109,7 +109,6 @@ while True:
     epoch += 1
     print 'Epoch', epoch
     train.train_batch(cnn, encode.encode_cnn, training_samples,
-<<<<<<< HEAD
                       cnn_learning_rate, question_map, display_callback, midpoint_eval)
 
 #def midpoint_eval(i):
@@ -123,24 +122,3 @@ while True:
 #    print 'Epoch', epoch
 #    train.train_batch(lstm, encode.encode_lstm, training_samples,
 #                      lstm_learning_rate, question_map, display_callback, midpoint_eval)
-
-=======
-                      cnn_learning_rate, display_callback, midpoint_eval)
-
-# NOTE: Trains LSTM
-# train.train_batch(lstm, encode.encode_lstm, training_samples[:2000],
-#                  lstm_learning_rate, display_callback)
-# evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
-
-# def midpoint_eval(i):
-#    if (i + 1) % 100 == 0:
-#        evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
-#
-# NOTE: Trains CNN
-# epoch = 0
-# while True:
-#    epoch += 1
-#    print 'Epoch', epoch
-#    train.train_batch(lstm, encode.encode_lstm, training_samples,
-#                      lstm_learning_rate, display_callback, midpoint_eval)
->>>>>>> 9603d024d4ef3f25084c05b43a1c771aab4f8323
