@@ -101,21 +101,21 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 #################################################
 
 
-# NOTE: Trains CNN
+model = cnn
+encode_fn = encode.encode_cnn
+learning_rate = cnn_learning_rate
 
+# Trains models
 def midpoint_eval(i):
     if (i + 1) % 100 == 0:
-        evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples, question_map)    
-train.train_batch(cnn, encode.encode_cnn, training_samples[:20],
-                  cnn_learning_rate, question_map, display_callback, midpoint_eval)
-evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples, question_map)
+        evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)    
+train.train_batch(model, encode_fn, training_samples[:10],
+                  learning_rate, question_map, display_callback, midpoint_eval)
 
-
-# NOTE: Trains LSTM
-
-#def midpoint_eval(i):
-#    if (i + 1) % 50 == 0:
-#        evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples, question_map)
-#train.train_batch(lstm, encode.encode_lstm, training_samples,
-#                  lstm_learning_rate, question_map, display_callback, midpoint_eval)
-#evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples, question_map)
+print
+print 'EVALUATION'
+print
+print 'Askubuntu dev'
+evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)
+print 'Askubuntu test'
+evaluate.evaluate_model(model, encode_fn, test_samples, question_map)
