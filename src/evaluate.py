@@ -9,7 +9,7 @@ import utils
 # Evaluation
 
 
-def evaluate_model(rnn, encode_fn, samples, k=10):
+def evaluate_model(rnn, encode_fn, samples):
     samples = filter(lambda s: len(s.similar) > 0, samples)
     criterion = nn.CosineEmbeddingLoss()
 
@@ -54,28 +54,23 @@ def evaluate_model(rnn, encode_fn, samples, k=10):
 
         results.sort()
         results = map(lambda x: x[1], results)
-        # print sample.similar
-        # print results
         results_matrix.append(results)
-        #print 'AP:', average_precision(sample, results)
-        #print 'RR:', reciprocal_rank(sample, results)
-        #print 'P@' + str(k) + ':', precision_at_k(sample, results, k)
-        #print 'AUC' + str(k) + ':', area_under_curve(sample, results)
-        #print
 
     MAP = mean_average_precision(samples, results_matrix)
     MRR = mean_reciprocal_rank(samples, results_matrix)
-    MPK = mean_precision_at_k(samples, results_matrix, k)
+    MPK1 = mean_precision_at_k(samples, results_matrix, 1)
+    MPK5 = mean_precision_at_k(samples, results_matrix, 5)
     MAUC = mean_area_under_curve(samples, results_matrix)
 
     print
     print 'MAP:', MAP
     print 'MRR:', MRR
-    print 'MP@' + str(k) + ':', MPK
+    print 'MP@1:', MPK1
+    print 'MP@5:', MPK5
     print 'MAUC:', MAUC
     print
 
-    return MAP, MRR, MPK
+    return MAP, MRR, MPK1, MPK5, MAUC
 
 
 def reciprocal_rank(sample, results):

@@ -14,4 +14,5 @@ class LanguageCNN(nn.Module):
     def forward(self, x):
         x = F.tanh(self.conv(x))
         x = F.avg_pool1d(x, x.size()[-1])
-        return self.linear(x.squeeze())
+        #return self.linear(x.squeeze())
+        return x
