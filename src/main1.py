@@ -98,27 +98,20 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 # MAIN                                          #
 #################################################
 
-def midpoint_eval(i):
-    if (i + 1) % 100 == 0:
-        evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples, question_map)
-
 
 # NOTE: Trains CNN
-epoch = 0
-while True:
-    epoch += 1
-    print 'Epoch', epoch
-    train.train_batch(cnn, encode.encode_cnn, training_samples,
-                      cnn_learning_rate, question_map, display_callback, midpoint_eval)
+
+def midpoint_eval(i):
+    if (i + 1) % 100 == 0:
+        evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples, question_map)    
+train.train_batch(cnn, encode.encode_cnn, training_samples[:2000],
+                  cnn_learning_rate, question_map, display_callback, midpoint_eval)
+
+
+# NOTE: Trains LSTM
 
 #def midpoint_eval(i):
 #    if (i + 1) % 50 == 0:
 #        evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples, question_map)
-#
-## NOTE: Trains LSTM
-#epoch = 0
-#while True:
-#    epoch += 1
-#    print 'Epoch', epoch
-#    train.train_batch(lstm, encode.encode_lstm, training_samples,
-#                      lstm_learning_rate, question_map, display_callback, midpoint_eval)
+#train.train_batch(lstm, encode.encode_lstm, training_samples,
+#                  lstm_learning_rate, question_map, display_callback, midpoint_eval)
