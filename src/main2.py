@@ -12,6 +12,8 @@ import train
 import encode
 import rcnn
 import evaluate
+import cnn
+import domain_transfer
 
 #################################################
 # Data loader
@@ -19,7 +21,8 @@ import evaluate
 
 def init():
     print 'Loading askubuntu training samples..'
-    askubuntu_training_samples = utils.load_samples('../data/askubuntu/train_random.txt')
+    askubuntu_training_samples = utils.load_samples(
+        '../data/askubuntu/train_random.txt')
     print len(askubuntu_training_samples)
 
     print 'Loading askubuntu dev samples..'
@@ -31,7 +34,8 @@ def init():
     print len(askubuntu_test_samples)
 
     print 'Loading askubuntu corpus..'
-    askubuntu_question_map = utils.load_corpus('../data/askubuntu/text_tokenized.txt')
+    askubuntu_question_map = utils.load_corpus(
+        '../data/askubuntu/text_tokenized.txt')
     print len(askubuntu_question_map)
 
     print 'Loading android dev samples..'
@@ -49,7 +53,8 @@ def init():
     print len(android_question_map)
 
     print 'Loading embeddings..'
-    embedding_map = utils.load_embeddings('../data/pruned_askubuntu_android_vector.txt')
+    embedding_map = utils.load_embeddings(
+        '../data/pruned_askubuntu_android_vector.txt')
     print len(embedding_map)
     print
 
@@ -57,9 +62,15 @@ def init():
     # IMPORTANT: Make sure to store the correct question map before using utils
     utils.store_question_map(askubuntu_question_map)
 
-    return (askubuntu_training_samples, askubuntu_dev_samples, askubuntu_test_samples,
-            askubuntu_question_map, android_dev_samples, android_test_samples,
-            android_question_map, embedding_map)
+    return (
+        askubuntu_training_samples,
+        askubuntu_dev_samples,
+        askubuntu_test_samples,
+        askubuntu_question_map,
+        android_dev_samples,
+        android_test_samples,
+        android_question_map,
+        embedding_map)
 
 
 #################################################
@@ -120,6 +131,15 @@ print lstm
 print
 
 #################################################
+# CNN Domain Transfer Net Configuration
+# (LSTM domain transfer net can be built the same way)
+cnn_domain_transfer_net = domain_transfer.DomainTransferNet(
+    cnn.CNN(),
+    nn.Linear(667, 667),
+    nn.Linear(667, 2))
+
+
+#################################################
 # Data loading
 
 (askubuntu_training_samples, askubuntu_dev_samples, askubuntu_test_samples,
@@ -153,11 +173,13 @@ print
 # print encoded
 
 # NOTE: Trains LSTM without batching
-# train.train(lstm, encode.encode_lstm, askubuntu_training_samples, lstm_learning_rate,
+# train.train(lstm, encode.encode_lstm, askubuntu_training_samples,
+#           lstm_learning_rate,
 #           display_callback)
 
 
-# batch_ids = [askubuntu_training_samples[0].id] + list(sample.candidate_map.keys())
+# batch_ids = [askubuntu_training_samples[0].id] +\
+#              list(sample.candidate_map.keys())
 # embeddings_batch = map(lambda id:
 #                       utils.get_embeddings(question_map[askubuntu_training_samples[0].id][0]),
 #                       batch_ids)
@@ -171,4 +193,4 @@ print
 
 
 # EVALUATION EXAMPLE
-#evaluate.evaluate_model(lstm, encode.encode_lstm, askubuntu_dev_samples)
+# evaluate.evaluate_model(lstm, encode.encode_lstm, askubuntu_dev_samples)

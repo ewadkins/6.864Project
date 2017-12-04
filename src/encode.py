@@ -12,7 +12,7 @@ import utils
 
 def encode_cnn(cnn, embeddings):
     input = torch.transpose(Variable(
-            torch.FloatTensor(embeddings)), 0, 1).unsqueeze(0)
+        torch.FloatTensor(embeddings)), 0, 1).unsqueeze(0)
     return cnn(input).squeeze()
 
 

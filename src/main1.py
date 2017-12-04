@@ -37,7 +37,8 @@ def init():
     print len(question_map)
 
     print 'Loading embeddings..'
-    embedding_map = utils.load_embeddings('../data/pruned_askubuntu_android_vector.txt')
+    embedding_map = utils.load_embeddings(
+        '../data/pruned_askubuntu_android_vector.txt')
     print len(embedding_map)
     print
 
@@ -108,14 +109,9 @@ print
 #################################################
 # CNN configuration
 
-embedding_size = 200
-filter_size = 5
-hidden_size = 300
-sequence_state_size = 150
+cnn_learning_rate = 1e-4
 
-cnn_learning_rate = 1e-1
-
-cnn = cnn.LanguageCNN(embedding_size, filter_size, hidden_size, sequence_state_size)
+cnn = cnn.CNN()
 
 print cnn
 print
@@ -172,6 +168,7 @@ def midpoint_eval(i):
     if (i + 1) % 100 == 0:
         evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples)
 
+
 # NOTE: Trains CNN
 epoch = 0
 while True:
@@ -181,19 +178,18 @@ while True:
                       cnn_learning_rate, display_callback, midpoint_eval)
 
 # NOTE: Trains LSTM
-#train.train_batch(lstm, encode.encode_lstm, training_samples[:2000],
+# train.train_batch(lstm, encode.encode_lstm, training_samples[:2000],
 #                  lstm_learning_rate, display_callback)
-#evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
+# evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
 
-#def midpoint_eval(i):
+# def midpoint_eval(i):
 #    if (i + 1) % 100 == 0:
 #        evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
 #
-## NOTE: Trains CNN
-#epoch = 0
-#while True:
+# NOTE: Trains CNN
+# epoch = 0
+# while True:
 #    epoch += 1
 #    print 'Epoch', epoch
 #    train.train_batch(lstm, encode.encode_lstm, training_samples,
 #                      lstm_learning_rate, display_callback, midpoint_eval)
-
