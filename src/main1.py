@@ -110,7 +110,7 @@ print
 
 embedding_size = 200
 filter_size = 5
-sequence_state_size = 100
+sequence_state_size = 200
 
 cnn_learning_rate = 1e-1
 
@@ -167,14 +167,17 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 # train.train_batch(lstm, encode.encode_lstm_batch, training_samples[:100],
 #                   lstm_learning_rate, display_callback)
 
+def midpoint_eval(i):
+    if (i + 1) % 100 == 0:
+        evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples)
+
 # NOTE: Trains CNN
 epoch = 0
 while True:
     epoch += 1
     print 'Epoch', epoch
     train.train_batch(cnn, encode.encode_cnn, training_samples,
-                      cnn_learning_rate, display_callback)
-    evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples)
+                      cnn_learning_rate, display_callback, midpoint_eval)
 
 # NOTE: Trains LSTM
 #train.train_batch(lstm, encode.encode_lstm, training_samples[:2000],
