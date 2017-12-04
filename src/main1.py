@@ -83,6 +83,8 @@ print
 #################################################
 # CNN configuration
 
+cnn_learning_rate = 1e-1
+
 cnn = cnn.CNN()
 
 print cnn
@@ -104,8 +106,9 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 def midpoint_eval(i):
     if (i + 1) % 100 == 0:
         evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples, question_map)    
-train.train_batch(cnn, encode.encode_cnn, training_samples[:2000],
+train.train_batch(cnn, encode.encode_cnn, training_samples[:20],
                   cnn_learning_rate, question_map, display_callback, midpoint_eval)
+evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples, question_map)
 
 
 # NOTE: Trains LSTM
@@ -115,3 +118,4 @@ train.train_batch(cnn, encode.encode_cnn, training_samples[:2000],
 #        evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples, question_map)
 #train.train_batch(lstm, encode.encode_lstm, training_samples,
 #                  lstm_learning_rate, question_map, display_callback, midpoint_eval)
+#evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples, question_map)

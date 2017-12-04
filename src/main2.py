@@ -109,6 +109,8 @@ print
 #################################################
 # CNN configuration
 
+cnn_learning_rate = 1e-1
+
 cnn = cnn.CNN()
 
 print cnn
@@ -140,8 +142,11 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(
 
 # NOTE: Trains CNN
 
-def midpoint_eval(i):
-    if (i + 1) % 200 == 0:
-        evaluate.evaluate_model(cnn, encode.encode_cnn, askubuntu_dev_samples, askubuntu_question_map)
-train.train_batch(cnn, encode.encode_cnn, askubuntu_training_samples[:100],
-                  cnn_learning_rate, askubuntu_question_map, display_callback, midpoint_eval)
+#def midpoint_eval(i):
+#    if (i + 1) % 200 == 0:
+#        evaluate.evaluate_model(cnn, encode.encode_cnn, askubuntu_dev_samples, askubuntu_question_map)
+#train.train_batch(cnn, encode.encode_cnn, askubuntu_training_samples[:100],
+#                  cnn_learning_rate, askubuntu_question_map, display_callback, midpoint_eval)
+
+
+# TODO: Create training function for domain transfer
