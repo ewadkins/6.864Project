@@ -55,9 +55,10 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    fig.clear()
-    plt.plot(list(range(len(losses))), losses)
-    plt.pause(0.0001)
+    if len(losses) % 20 == 0:
+        fig.clear()
+        plt.plot(list(range(len(losses))), losses)
+        plt.pause(0.0001)
 
 #################################################
 # LSTM configuration
@@ -109,7 +110,7 @@ learning_rate = cnn_learning_rate
 def midpoint_eval(i):
     if (i + 1) % 100 == 0:
         evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)    
-train.train_batch(model, encode_fn, training_samples[:10],
+train.train_batch(model, encode_fn, training_samples[:2000],
                   learning_rate, question_map, display_callback, midpoint_eval)
 
 print

@@ -80,7 +80,7 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    if len(losses) % 100 == 0:
+    if len(losses) % 20 == 0:
         fig.clear()
         plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
@@ -147,7 +147,7 @@ learning_rate = cnn_learning_rate
 def midpoint_eval(i):
     if (i + 1) % 100 == 0:
         evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map)    
-train.train_batch(model, encode_fn, askubuntu_training_samples[:10],
+train.train_batch(model, encode_fn, askubuntu_training_samples[:2000],
                   learning_rate, askubuntu_question_map, display_callback, midpoint_eval)
 
 print
