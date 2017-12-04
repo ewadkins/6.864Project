@@ -110,11 +110,12 @@ print
 
 embedding_size = 200
 filter_size = 5
-sequence_state_size = 200
+hidden_size = 300
+sequence_state_size = 150
 
 cnn_learning_rate = 1e-1
 
-cnn = cnn.LanguageCNN(embedding_size, filter_size, sequence_state_size)
+cnn = cnn.LanguageCNN(embedding_size, filter_size, hidden_size, sequence_state_size)
 
 print cnn
 print
