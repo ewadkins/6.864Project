@@ -98,9 +98,3 @@ def get_embeddings(string):
     return np.array(map(lambda x: 
                         embedding_map[x] if x in embedding_map else [0.0 for _ in range(200)],
                         string.split()))
-
-# Maps a question id to its (title, body)
-
-
-def get_question(id):
-    return question_map[id]

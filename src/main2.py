@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import utils
 import train
 import encode
-import rcnn
+import cnn
 import evaluate
 
 #################################################
@@ -54,8 +54,6 @@ def init():
     print
 
     utils.store_embedding_map(embedding_map)
-    # IMPORTANT: Make sure to store the correct question map before using utils
-    utils.store_question_map(askubuntu_question_map)
 
     return (askubuntu_training_samples, askubuntu_dev_samples, askubuntu_test_samples,
             askubuntu_question_map, android_dev_samples, android_test_samples,
@@ -71,32 +69,10 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    fig.clear()
-    plt.plot(list(range(len(losses))), losses)
-    plt.pause(0.0001)
-
-#################################################
-# RCNN configuration
-
-
-rcnn_input_size = 200  # size of word embedding
-# sizes of the convolutional layers; determines # of conv layers
-rcnn_hidden_sizes = [300, 200, 150]
-rcnn_output_size = 100  # size of state vector
-
-# NOTE: assert len(rcnn_kernel_sizes) == len(rcnn_hidden_sizes)
-rcnn_kernel_sizes = [5, 4, 3]
-# NOTE: assert len(rcnn_pooling_sizes) == len(rcnn_hidden_sizes)
-rcnn_pooling_sizes = [2, 2, 2]
-
-rcnn_learning_rate = 1e-1
-
-rcnn = rcnn.RCNN(rcnn_input_size, rcnn_hidden_sizes, rcnn_output_size,
-                 rcnn_kernel_sizes, rcnn_pooling_sizes,
-                 padding=max(rcnn_kernel_sizes))
-
-print rcnn
-print
+    if len(losses) % 100 == 0:
+        fig.clear()
+        plt.plot(list(range(len(losses))), losses)
+        plt.pause(0.0001)
 
 #################################################
 # LSTM configuration
@@ -120,6 +96,21 @@ print lstm
 print
 
 #################################################
+# CNN configuration
+
+embedding_size = 200
+filter_size = 5
+hidden_size = 300
+sequence_state_size = 250
+
+cnn_learning_rate = 1e-1
+
+cnn = cnn.LanguageCNN(embedding_size, filter_size, hidden_size, sequence_state_size)
+
+print cnn
+print
+
+#################################################
 # Data loading
 
 (askubuntu_training_samples, askubuntu_dev_samples, askubuntu_test_samples,
@@ -130,45 +121,24 @@ print
 # MAIN                                          #
 #################################################
 
-# title, body = android_question_map[android_dev_samples[0].id]
-# print title
-# embeddings = utils.get_embeddings(title)
-# print np.shape(embeddings)
-# encoded = encode.encode_rcnn(rcnn, embeddings)
-# print encoded
 
-# NOTE: Trains RCNN without batching
-# train.train(
-#    rcnn,
-#    encode.encode_rcnn,
-#    askubuntu_training_samples,
-#    rcnn_learning_rate,
-#    display_callback)
+def midpoint_eval(i):
+    if (i + 1) % 200 == 0:
+        evaluate.evaluate_model(cnn, encode.encode_cnn, askubuntu_dev_samples, askubuntu_question_map)
+
+# NOTE: Trains CNN
+train.train_batch(cnn, encode.encode_cnn, askubuntu_training_samples[:100],
+                  cnn_learning_rate, askubuntu_question_map, display_callback, midpoint_eval)
 
 
-# title, body = question_map[askubuntu_training_samples[0].id]
-# print title
-# embeddings = utils.get_embeddings(title)
-# encoded = encode.encode_lstm(lstm, embeddings)
-# print encoded
-
-# NOTE: Trains LSTM without batching
-# train.train(lstm, encode.encode_lstm, askubuntu_training_samples, lstm_learning_rate,
-#           display_callback)
-
-
-# batch_ids = [askubuntu_training_samples[0].id] + list(sample.candidate_map.keys())
-# embeddings_batch = map(lambda id:
-#                       utils.get_embeddings(question_map[askubuntu_training_samples[0].id][0]),
-#                       batch_ids)
-# print np.shape(embeddings_batch)
-# encoded_batch = encode.encode_lstm_batch(lstm, embeddings_batch)
-# print np.shape(encoded_batch)
-
-# NOTE: Trains LSTM with batching
-# train.train_batch(lstm, encode.encode_lstm_batch, askubuntu_training_samples,
-#                  lstm_learning_rate, display_callback)
-
-
-# EVALUATION EXAMPLE
-#evaluate.evaluate_model(lstm, encode.encode_lstm, askubuntu_dev_samples)
+#print
+#print 'EVALUATION'
+#print
+#print 'Askubuntu dev'
+#evaluate.evaluate_model(cnn, encode.encode_cnn, askubuntu_dev_samples, askubuntu_question_map)
+#print 'Askubuntu test'
+#evaluate.evaluate_model(cnn, encode.encode_cnn, askubuntu_test_samples, askubuntu_question_map)
+#print 'Android dev'
+#evaluate.evaluate_model(cnn, encode.encode_cnn, android_dev_samples, android_question_map)
+#print 'Android dev'
+#evaluate.evaluate_model(cnn, encode.encode_cnn, android_test_samples, android_question_map)

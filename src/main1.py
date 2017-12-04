@@ -10,10 +10,8 @@ import matplotlib.pyplot as plt
 import utils
 import train
 import encode
-import rcnn
 import cnn
 import evaluate
-import cnn
 
 #################################################
 # Data loader
@@ -42,7 +40,6 @@ def init():
     print
 
     utils.store_embedding_map(embedding_map)
-    utils.store_question_map(question_map)
 
     return (training_samples,
             dev_samples, test_samples, question_map, embedding_map)
@@ -62,34 +59,11 @@ def display_callback(loss):
     plt.pause(0.0001)
 
 #################################################
-# RCNN configuration
-
-
-rcnn_input_size = 200  # size of word embedding
-# sizes of the convolutional layers; determines # of conv layers
-rcnn_hidden_sizes = [300, 200, 150]
-rcnn_output_size = 100  # size of state vector
-
-# NOTE: assert len(rcnn_kernel_sizes) == len(rcnn_hidden_sizes)
-rcnn_kernel_sizes = [5, 4, 3]
-# NOTE: assert len(rcnn_pooling_sizes) == len(rcnn_hidden_sizes)
-rcnn_pooling_sizes = [2, 2, 2]
-
-rcnn_learning_rate = 1e-1
-
-rcnn = rcnn.RCNN(rcnn_input_size, rcnn_hidden_sizes, rcnn_output_size,
-                 rcnn_kernel_sizes, rcnn_pooling_sizes,
-                 padding=max(rcnn_kernel_sizes))
-
-print rcnn
-print
-
-#################################################
 # LSTM configuration
 
 lstm_input_size = 200
 lstm_hidden_size = 300
-lstm_num_layers = 1
+lstm_num_layers = 2
 
 lstm_learning_rate = 1e-1
 
@@ -111,7 +85,7 @@ print
 embedding_size = 200
 filter_size = 5
 hidden_size = 300
-sequence_state_size = 150
+sequence_state_size = 250
 
 cnn_learning_rate = 1e-1
 
@@ -130,47 +104,9 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 # MAIN                                          #
 #################################################
 
-# title, body = question_map[training_samples[0].id]
-# print title
-# embeddings = utils.get_embeddings(title, embedding_map)
-# encoded = encode.encode_rcnn(rcnn, embeddings)
-# print encoded
-
-# NOTE: Trains RCNN without batching
-# train.train(
-#    rcnn,
-#    encode.encode_rcnn,
-#    training_samples,
-#    rcnn_learning_rate,
-#    display_callback)
-
-
-# title, body = question_map[training_samples[0].id]
-# print title
-# embeddings = utils.get_embeddings(title)
-# encoded = encode.encode_lstm(lstm, embeddings)
-# print encoded
-
-# NOTE: Trains LSTM without batching
-# train.train(lstm, encode.encode_lstm, training_samples, lstm_learning_rate,
-#           display_callback)
-
-
-# batch_ids = [training_samples[0].id] + list(sample.candidate_map.keys())
-# embeddings_batch = map(lambda id:
-#                       utils.get_embeddings(question_map[training_samples[0].id][0]),
-#                       batch_ids)
-# print np.shape(embeddings_batch)
-# encoded_batch = encode.encode_lstm_batch(lstm, embeddings_batch)
-# print np.shape(encoded_batch)
-
-# NOTE: Trains LSTM with batching
-# train.train_batch(lstm, encode.encode_lstm_batch, training_samples[:100],
-#                   lstm_learning_rate, display_callback)
-
 def midpoint_eval(i):
     if (i + 1) % 100 == 0:
-        evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples)
+        evaluate.evaluate_model(cnn, encode.encode_cnn, dev_samples, question_map)
 
 # NOTE: Trains CNN
 epoch = 0
@@ -178,22 +114,17 @@ while True:
     epoch += 1
     print 'Epoch', epoch
     train.train_batch(cnn, encode.encode_cnn, training_samples,
-                      cnn_learning_rate, display_callback, midpoint_eval)
-
-# NOTE: Trains LSTM
-#train.train_batch(lstm, encode.encode_lstm, training_samples[:2000],
-#                  lstm_learning_rate, display_callback)
-#evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
+                      cnn_learning_rate, question_map, display_callback, midpoint_eval)
 
 #def midpoint_eval(i):
-#    if (i + 1) % 100 == 0:
-#        evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples)
+#    if (i + 1) % 50 == 0:
+#        evaluate.evaluate_model(lstm, encode.encode_lstm, dev_samples, question_map)
 #
-## NOTE: Trains CNN
+## NOTE: Trains LSTM
 #epoch = 0
 #while True:
 #    epoch += 1
 #    print 'Epoch', epoch
 #    train.train_batch(lstm, encode.encode_lstm, training_samples,
-#                      lstm_learning_rate, display_callback, midpoint_eval)
+#                      lstm_learning_rate, question_map, display_callback, midpoint_eval)
 

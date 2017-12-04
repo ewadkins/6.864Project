@@ -9,7 +9,7 @@ import utils
 # Evaluation
 
 
-def evaluate_model(rnn, encode_fn, samples):
+def evaluate_model(rnn, encode_fn, samples, question_map):
     samples = filter(lambda s: len(s.similar) > 0, samples)
     criterion = nn.CosineEmbeddingLoss()
 
@@ -23,7 +23,7 @@ def evaluate_model(rnn, encode_fn, samples):
     results_matrix = []
     for i in range(len(samples)):
         sample = samples[i]
-        embeddings = get_embeddings(*utils.get_question(sample.id))
+        embeddings = get_embeddings(*question_map[sample.id])
         if len(embeddings) == 0:
             continue
 
@@ -34,7 +34,7 @@ def evaluate_model(rnn, encode_fn, samples):
         results = []
         for candidate_id in sample.candidate_map:
             similar_indicator = sample.candidate_map[candidate_id]
-            candidate_title, candidate_body = utils.get_question(candidate_id)
+            candidate_title, candidate_body = question_map[candidate_id]
             candidate_embeddings = get_embeddings(
                 candidate_title, candidate_body)
             if len(candidate_embeddings) == 0:
