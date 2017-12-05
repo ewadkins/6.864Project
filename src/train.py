@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torch.optim as optim
 from torch.autograd import Variable
 import random
@@ -68,61 +69,60 @@ def train_batch(
         question_map,
         display_callback=None,
         callback=None):
-    optimizer = optim.Adam(net.parameters(), lr=learning_rate)
-    criterion = nn.CosineEmbeddingLoss()
+    
+    def cosine_similarity(x1, x2):
+        return 1 - F.cosine_embedding_loss(x1, x2, Variable(torch.IntTensor(1)), 0, True)
 
     # Given a title and body, return embeddings to use
     # Currently, only use titles
     def get_embeddings(title, body):
         return utils.get_embeddings(title)
 
-    # nn.train();
-    encoded = []
-    candidate_encoded = []
-    similar_indicators = []
+
+    optimizer = optim.Adam(net.parameters(), lr=learning_rate)
+
     for i in range(len(training_samples)):
         sample = training_samples[i]
-        embeddings = get_embeddings(*question_map[sample.id])
-
-        # print
+        sample_id = sample.id
+        sample_embeddings = get_embeddings(*question_map[sample_id])
+        sample_encoded = encode_fn(net, sample_embeddings).unsqueeze(0)
+        
         print i + 1, '/', len(training_samples)
-        # print title
 
-        encoded_var = encode_fn(net, embeddings).unsqueeze(0)
+        for similar_id in sample.similar:
+            similar_embeddings = get_embeddings(*question_map[similar_id])
+            similar_encoded = encode_fn(net, sample_embeddings).unsqueeze(0)
 
-        similar_id = sample.similar[int(random.random() * len(sample.similar))]
-        candidate_ids = [similar_id] + sample.dissimilar
-        #candidate_ids = list(sample.candidate_map.keys())
-        random.shuffle(candidate_ids)
-        for candidate_id in candidate_ids:
-            candidate_title, candidate_body = question_map[candidate_id]
-            candidate_embeddings = get_embeddings(
-                candidate_title, candidate_body)
-            if len(candidate_embeddings) != 0:  # NOTE: Probably do something
-                                                # else.
-                encoded.append(encoded_var)
-                candidate_encoded.append(
-                    encode_fn(net, candidate_embeddings).unsqueeze(0))
-                similar_indicators.append(sample.candidate_map[candidate_id])
+            optimizer.zero_grad()
+            
+            losses = []
+            for candidate_id in sample.dissimilar:
+                sample_encoded = encode_fn(net, sample_embeddings).unsqueeze(0)
+                similar_encoded = encode_fn(net, sample_embeddings).unsqueeze(0)
+                
+                candidate_embeddings = get_embeddings(*question_map[candidate_id])
+                candidate_encoded = encode_fn(net, candidate_embeddings).unsqueeze(0)
 
-    if (i + 1) % 10 == 0:
-        # Update
-        encoded = torch.cat(encoded)
-        candidate_encoded = torch.cat(candidate_encoded)
-        similar_indicators = Variable(torch.IntTensor(similar_indicators))
-        optimizer.zero_grad()
-        loss = criterion(
-            encoded,
-            candidate_encoded,
-            similar_indicators)
+                #val = cosine_similarity(sample_encoded, candidate_encoded) - \
+                #        cosine_similarity(sample_encoded, similar_encoded)
+                    
+                val = F.margin_ranking_loss(cosine_similarity(sample_encoded, candidate_encoded),
+                                            cosine_similarity(sample_encoded, similar_encoded),
+                                                              Variable(torch.FloatTensor([-1])))
+                losses.append(val)
+            
+            loss = max(losses, key=lambda x: x.data[0])
+            #print similar_id
+            #print loss
 
-        loss.backward()
-        # print loss.data[0]
-        if display_callback is not None:
-            display_callback(loss.data[0])
-        optimizer.step()
-    if callback is not None:
-        callback(i)
+            # Update
+            loss.backward()
+            optimizer.step()
+            if display_callback is not None:
+                display_callback(loss.data[0])
+            if callback is not None:
+                callback(i)
+            
 
 # def train_batch_adverserial(
 #        net,

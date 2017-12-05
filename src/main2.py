@@ -80,7 +80,7 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    if len(losses) % 50 == 0:
+    if len(losses) % 10 == 0:
         fig.clear()
         plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
@@ -150,7 +150,7 @@ evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_quest
 
 # Trains models
 def midpoint_eval(i):
-    if (i + 1) % 200 == 0:
+    if (i + 1) % 50 == 0:
         evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map) 
 epoch = 0
 while True:
