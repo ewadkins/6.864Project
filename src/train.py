@@ -96,6 +96,7 @@ def train_batch(
             optimizer.zero_grad()
             
             losses = []
+            targets = []
             for candidate_id in sample.dissimilar:
                 sample_encoded = encode_fn(net, sample_embeddings).unsqueeze(0)
                 similar_encoded = encode_fn(net, sample_embeddings).unsqueeze(0)
@@ -103,14 +104,16 @@ def train_batch(
                 candidate_embeddings = get_embeddings(*question_map[candidate_id])
                 candidate_encoded = encode_fn(net, candidate_embeddings).unsqueeze(0)
 
-                #val = cosine_similarity(sample_encoded, candidate_encoded) - \
-                #        cosine_similarity(sample_encoded, similar_encoded)
+                val = cosine_similarity(sample_encoded, candidate_encoded) - \
+                        cosine_similarity(sample_encoded, similar_encoded)
                     
-                val = F.margin_ranking_loss(cosine_similarity(sample_encoded, candidate_encoded),
-                                            cosine_similarity(sample_encoded, similar_encoded),
-                                                              Variable(torch.FloatTensor([-1])))
+                #val = F.margin_ranking_loss(cosine_similarity(sample_encoded, candidate_encoded),
+                #                            cosine_similarity(sample_encoded, similar_encoded),
+                #                                              Variable(torch.FloatTensor([-1])))
                 losses.append(val)
+                #targets.append()
             
+            #loss = F.multi_margin_loss(torch.cat(losses))
             loss = max(losses, key=lambda x: x.data[0])
             #print similar_id
             #print loss
