@@ -60,7 +60,7 @@ import utils
 #                display_callback(loss.data[0])
 #            optimizer.step()
 
-
+'''
 def train_batch(
         net,
         encode_fn,
@@ -117,6 +117,7 @@ def train_batch(
             loss = max(losses, key=lambda x: x.data[0])
             #print similar_id
             #print loss
+            loss *= -1
 
             # Update
             loss.backward()
@@ -125,8 +126,23 @@ def train_batch(
                 display_callback(loss.data[0])
             if callback is not None:
                 callback(i)
-            
+'''
 
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+'''
 # def train_batch_adverserial(
 #        net,
 #        encode_fn,
@@ -189,3 +205,4 @@ def train_batch(
 #        if callback is not None:
 #            callback(i)
 #        optimizer.step()
+'''

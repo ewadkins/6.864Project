@@ -8,7 +8,7 @@ import random
 import matplotlib.pyplot as plt
 
 import utils
-import train
+import real_train
 import encode
 import cnn
 import evaluate
@@ -84,7 +84,7 @@ print
 #################################################
 # CNN configuration
 
-cnn_learning_rate = 1e-1
+cnn_learning_rate = 1e-5
 
 cnn = cnn.CNN()
 
@@ -108,9 +108,9 @@ learning_rate = cnn_learning_rate
 
 # Trains models
 def midpoint_eval(i):
-    if (i + 1) % 100 == 0:
+    if (i + 1) % 1000 == 0:
         evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)    
-train.train_batch(model, encode_fn, training_samples[:2000],
+real_train.train_batch(model, encode_fn, training_samples,
                   learning_rate, question_map, display_callback, midpoint_eval)
 
 print
