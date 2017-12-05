@@ -10,6 +10,14 @@ import utils
 # word embeddings
 
 
+def encode_bag_of_words(string, vocabulary_map):
+    encoded = [0.0] * len(vocabulary_map)
+    for word in string.split():
+        if word in vocabulary_map:
+            encoded[vocabulary_map[word]] += 1
+    return Variable(torch.FloatTensor(encoded))
+
+
 def encode_cnn(cnn, embeddings):
     input = torch.transpose(Variable(
         torch.FloatTensor(embeddings)), 0, 1).unsqueeze(0)

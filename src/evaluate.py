@@ -4,6 +4,7 @@ from torch.autograd import Variable
 import sys
 
 import utils
+import encode
 
 #################################################
 # Evaluation
@@ -42,6 +43,65 @@ def evaluate_model(rnn, encode_fn, samples, question_map):
 
             encoded = encode_fn(rnn, embeddings)
             candidate_encoded = encode_fn(rnn, candidate_embeddings)
+
+            # Compare similarity
+            difference = criterion(
+                encoded.unsqueeze(0),
+                candidate_encoded.unsqueeze(0),
+                Variable(
+                    torch.IntTensor(
+                        [1]))).data[0]
+            results.append((difference, candidate_id))
+
+        results.sort()
+        #print results
+        results = map(lambda x: x[1], results)
+        #print results
+        results_matrix.append(results)
+
+    MAP = mean_average_precision(samples, results_matrix)
+    MRR = mean_reciprocal_rank(samples, results_matrix)
+    MPK1 = mean_precision_at_k(samples, results_matrix, 1)
+    MPK5 = mean_precision_at_k(samples, results_matrix, 5)
+    MAUC = mean_area_under_curve(samples, results_matrix)
+
+    print
+    print 'MAP:', MAP
+    print 'MRR:', MRR
+    print 'MP@1:', MPK1
+    print 'MP@5:', MPK5
+    print 'MAUC:', MAUC
+    print
+
+    return MAP, MRR, MPK1, MPK5, MAUC
+
+def evaluate_bag_of_words(samples, question_map, vocabulary_map):
+    samples = filter(lambda s: len(s.similar) > 0, samples)
+    criterion = nn.CosineEmbeddingLoss()
+
+    # Given a title and body, return embeddings to use
+    # Currently, only use titles
+    def transform(title, body):
+        return title + ' ' + body
+
+    print
+    print 'Evaluating',
+    results_matrix = []
+    for i in range(len(samples)):
+        sample = samples[i]
+        sample_text = transform(*question_map[sample.id])
+        # print i + 1, '/', len(samples)
+        sys.stdout.write('.')
+        sys.stdout.flush()
+
+        results = []
+        for candidate_id in sample.candidate_map:
+            similar_indicator = sample.candidate_map[candidate_id]
+            candidate_title, candidate_body = question_map[candidate_id]
+            candidate_text = transform(candidate_title, candidate_body)
+
+            encoded = encode.encode_bag_of_words(sample_text, vocabulary_map)
+            candidate_encoded = encode.encode_bag_of_words(candidate_text, vocabulary_map)
 
             # Compare similarity
             difference = criterion(

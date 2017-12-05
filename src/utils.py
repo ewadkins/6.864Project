@@ -101,3 +101,12 @@ def store_question_map(_question_map):
 def get_embeddings(string):
     return np.array(map(lambda x: embedding_map[x] if x in embedding_map else [
                     0.0 for _ in range(200)], string.split()))
+
+
+def get_vocabulary_map(question_map):
+    vocabulary = list(set(
+            ' '.join([' '.join(question_map[id]).lower() for id in question_map]).split()))
+    vocabulary_map = {}
+    for i in range(len(vocabulary)):
+        vocabulary_map[vocabulary[i]] = i
+    return vocabulary_map

@@ -55,7 +55,7 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    if len(losses) % 20 == 0:
+    if len(losses) % 10 == 0:
         fig.clear()
         plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
@@ -65,7 +65,7 @@ def display_callback(loss):
 
 lstm_input_size = 200
 lstm_hidden_size = 300
-lstm_num_layers = 2
+lstm_num_layers = 1
 
 lstm_learning_rate = 1e-1
 
@@ -102,16 +102,20 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 #################################################
 
 
-model = cnn
-encode_fn = encode.encode_cnn
-learning_rate = cnn_learning_rate
+model = lstm
+encode_fn = encode.encode_lstm
+learning_rate = lstm_learning_rate
 
 # Trains models
 def midpoint_eval(i):
-    if (i + 1) % 1000 == 0:
-        evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)    
-real_train.train_batch(model, encode_fn, training_samples,
-                  learning_rate, question_map, display_callback, midpoint_eval)
+    if (i + 1) % 100 == 0:
+        evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)
+epoch = 0
+while True:
+    epoch += 1
+    print 'Epoch:', epoch
+    real_train.train_batch(model, encode_fn, training_samples,
+                           learning_rate, question_map, display_callback, midpoint_eval)
 
 print
 print 'EVALUATION'

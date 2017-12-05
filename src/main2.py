@@ -8,7 +8,7 @@ import random
 import matplotlib.pyplot as plt
 
 import utils
-import train
+import real_train
 import encode
 import cnn
 import evaluate
@@ -141,6 +141,20 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(
 #################################################
 
 
+
+
+# EVALUATE WITH BAG OF WORDS HEURISTIC
+print 'Bag of words evaluation:'
+question_map = askubuntu_question_map
+samples = askubuntu_dev_samples
+
+vocabulary_map = utils.get_vocabulary_map(question_map)
+evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
+#######
+
+
+
+
 model = cnn
 encode_fn = encode.encode_cnn
 learning_rate = cnn_learning_rate
@@ -157,8 +171,9 @@ while True:
     epoch += 1
     print
     print 'Epoch:', epoch
-    train.train_batch(model, encode_fn, askubuntu_training_samples,
-                      learning_rate, askubuntu_question_map, display_callback, midpoint_eval)
+    real_train.train_batch(model, encode_fn, askubuntu_training_samples,
+                           learning_rate, askubuntu_question_map,
+                           display_callback, midpoint_eval)
 
 #print askubuntu_dev_samples[6]
 #evaluate.evaluate_model(cnn, encode.encode_cnn, [askubuntu_dev_samples[6]], askubuntu_question_map)
