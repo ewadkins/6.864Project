@@ -13,15 +13,14 @@ class GradientReversal(torch.autograd.Function):
 
 
 class DomainTransferNet(nn.Module):
-    def __init__(self, feature_extractor, label_predictor, domain_classifier):
+    def __init__(self, feature_extractor):
         super(DomainTransferNet, self).__init__()
         self.feature_extractor = feature_extractor
-        self.label_predictor = label_predictor
-        self.domain_classifier = domain_classifier
+        self.linear = nn.Linear(667, 2)
+        self.softmax = nn.Softmax()
 
-    def forward(self, x, label_classifier=True):
+    def forward(self, x, return_domain=False):
         x = self.feature_extractor(x)
-        domain = GradientReversal.apply(x)
-        domain = self.domain_classifier(domain)
-        label = self.label_predictor(x)
-        return label, domain
+        if return_domain:
+            return self.softmax(self.linear(x))
+        return x

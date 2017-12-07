@@ -7,43 +7,11 @@ from torch.autograd import Variable
 import random
 import matplotlib.pyplot as plt
 
+import data_loader1
 import utils
-import real_train
+import train
 import encode
-import cnn
 import evaluate
-
-#################################################
-# Data loader
-
-
-def init():
-    print 'Loading training samples..'
-    training_samples = utils.load_samples('../data/askubuntu/train_random.txt')
-    print len(training_samples)
-
-    print 'Loading dev samples..'
-    dev_samples = utils.load_samples('../data/askubuntu/dev.txt')
-    print len(dev_samples)
-
-    print 'Loading test samples..'
-    test_samples = utils.load_samples('../data/askubuntu/test.txt')
-    print len(test_samples)
-
-    print 'Loading corpus..'
-    question_map = utils.load_corpus('../data/askubuntu/text_tokenized.txt')
-    print len(question_map)
-
-    print 'Loading embeddings..'
-    embedding_map = utils.load_embeddings(
-        '../data/pruned_askubuntu_android_vector.txt')
-    print len(embedding_map)
-    print
-
-    utils.store_embedding_map(embedding_map)
-
-    return (training_samples,
-            dev_samples, test_samples, question_map, embedding_map)
 
 
 #################################################
@@ -55,7 +23,7 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    if len(losses) % 10 == 0:
+    if len(losses) % 1 == 0:
         fig.clear()
         plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
@@ -72,11 +40,7 @@ lstm_learning_rate = 1e-1
 lstm = nn.LSTM(
     lstm_input_size,
     lstm_hidden_size,
-    lstm_num_layers,
-    batch_first=True)
-
-# Dont remove; values needed to encode
-encode.store_config(lstm_hidden_size, lstm_num_layers)
+    lstm_num_layers)
 
 print lstm
 print
@@ -84,9 +48,19 @@ print
 #################################################
 # CNN configuration
 
+class CNN(nn.Module):
+    def __init__(self):
+        super(CNN, self).__init__()
+        self.conv = nn.Conv1d(200, 667, 3, 1, 2)
+
+    def forward(self, x):
+        x = F.tanh(self.conv(x))
+        x = F.avg_pool1d(x, x.size()[-1])
+        return x.squeeze(2)
+    
 cnn_learning_rate = 1e-5
 
-cnn = cnn.CNN()
+cnn = CNN()
 
 print cnn
 print
@@ -94,8 +68,7 @@ print
 #################################################
 # Data loading
 
-training_samples, dev_samples, test_samples, question_map, embedding_map =\
-    init()
+training_samples, dev_samples, test_samples, question_map, embedding_map = data_loader1.init()
 
 #################################################
 # MAIN                                          #
@@ -104,19 +77,20 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 
 model = lstm
 encode_fn = encode.encode_lstm
+optimizer = optim.SGD
 learning_rate = lstm_learning_rate
+batch_size = 10
+num_batches = 100
+
 
 # Trains models
-def midpoint_eval(i):
-    if (i + 1) % 100 == 0:
+def midpoint_eval(batch):
+    if (batch + 1) % 10 == 0:
         evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)
-epoch = 0
-while True:
-    epoch += 1
-    print 'Epoch:', epoch
-    real_train.train_batch(model, encode_fn, training_samples,
-                           learning_rate, question_map, display_callback, midpoint_eval)
-
+        
+train.train(model, encode_fn, optimizer, training_samples,
+            batch_size, num_batches, learning_rate,
+            question_map, display_callback, midpoint_eval)
 print
 print 'EVALUATION'
 print

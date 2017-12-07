@@ -93,11 +93,6 @@ def store_question_map(_question_map):
 # Maps a string of words to an array of word embeddings, shape(num_words,
 # embedding_length)
 
-
-# def get_embeddings(string):
-#    return np.array(map(lambda x: embedding_map[x],
-#                        filter(lambda x: x in embedding_map, string.split())))
-
 def get_embeddings(string):
     return np.array(map(lambda x: embedding_map[x] if x in embedding_map else [
                     0.0 for _ in range(200)], string.split()))

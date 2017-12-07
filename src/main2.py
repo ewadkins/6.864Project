@@ -7,68 +7,12 @@ from torch.autograd import Variable
 import random
 import matplotlib.pyplot as plt
 
+import data_loader2
 import utils
-import real_train
+import train
 import encode
-import cnn
 import evaluate
-import cnn
 import domain_transfer
-
-#################################################
-# Data loader
-
-
-def init():
-    print 'Loading askubuntu training samples..'
-    askubuntu_training_samples = utils.load_samples(
-        '../data/askubuntu/train_random.txt')
-    print len(askubuntu_training_samples)
-
-    print 'Loading askubuntu dev samples..'
-    askubuntu_dev_samples = utils.load_samples('../data/askubuntu/dev.txt')
-    print len(askubuntu_dev_samples)
-
-    print 'Loading askubuntu test samples..'
-    askubuntu_test_samples = utils.load_samples('../data/askubuntu/test.txt')
-    print len(askubuntu_test_samples)
-
-    print 'Loading askubuntu corpus..'
-    askubuntu_question_map = utils.load_corpus(
-        '../data/askubuntu/text_tokenized.txt')
-    print len(askubuntu_question_map)
-
-    print 'Loading android dev samples..'
-    android_dev_samples = utils.load_samples_stupid_format(
-        '../data/android/dev.pos.txt', '../data/android/dev.neg.txt')
-    print len(android_dev_samples)
-
-    print 'Loading android test samples..'
-    android_test_samples = utils.load_samples_stupid_format(
-        '../data/android/test.pos.txt', '../data/android/test.neg.txt')
-    print len(android_test_samples)
-
-    print 'Loading android corpus..'
-    android_question_map = utils.load_corpus('../data/android/corpus.tsv')
-    print len(android_question_map)
-
-    print 'Loading embeddings..'
-    embedding_map = utils.load_embeddings(
-        '../data/pruned_askubuntu_android_vector.txt')
-    print len(embedding_map)
-    print
-
-    utils.store_embedding_map(embedding_map)
-
-    return (
-        askubuntu_training_samples,
-        askubuntu_dev_samples,
-        askubuntu_test_samples,
-        askubuntu_question_map,
-        android_dev_samples,
-        android_test_samples,
-        android_question_map,
-        embedding_map)
 
 
 #################################################
@@ -80,7 +24,7 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    if len(losses) % 10 == 0:
+    if len(losses) % 100 == 0:
         fig.clear()
         plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
@@ -89,7 +33,7 @@ def display_callback(loss):
 # LSTM configuration
 
 lstm_input_size = 200
-lstm_hidden_size = 300
+lstm_hidden_size = 240
 lstm_num_layers = 1
 
 lstm_learning_rate = 1e-1
@@ -97,11 +41,7 @@ lstm_learning_rate = 1e-1
 lstm = nn.LSTM(
     lstm_input_size,
     lstm_hidden_size,
-    lstm_num_layers,
-    batch_first=True)
-
-# Dont remove; values needed to encode
-encode.store_config(lstm_hidden_size, lstm_num_layers)
+    lstm_num_layers)
 
 print lstm
 print
@@ -109,9 +49,19 @@ print
 #################################################
 # CNN configuration
 
-cnn_learning_rate = 1e-1
+class CNN(nn.Module):
+    def __init__(self):
+        super(CNN, self).__init__()
+        self.conv = nn.Conv1d(200, 667, 3, 1, 2)
 
-cnn = cnn.CNN()
+    def forward(self, x):
+        x = F.tanh(self.conv(x))
+        x = F.avg_pool1d(x, x.size()[-1])
+        return x.squeeze(2)
+
+cnn_learning_rate = 1e-5
+
+cnn = CNN()
 
 print cnn
 print
@@ -123,18 +73,14 @@ print
 # cnn or lstm
 feature_extractor = cnn
 
-cnn_domain_transfer_net = domain_transfer.DomainTransferNet(
-    feature_extractor,
-    #nn.Linear(667, 667),
-    nn.Linear(667, 2),
-    lambda x: x)
+cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 
 #################################################
 # Data loading
 
 (askubuntu_training_samples, askubuntu_dev_samples, askubuntu_test_samples,
  askubuntu_question_map, android_dev_samples, android_test_samples,
- android_question_map, embedding_map) = init()
+ android_question_map, embedding_map) = data_loader2.init()
 
 #################################################
 # MAIN                                          #
@@ -142,11 +88,13 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(
 
 
 
+#evaluate.evaluate_model(cnn_domain_transfer_net, encode.encode_cnn_dt_label,
+#                        android_dev_samples, android_question_map)
 
 # EVALUATE WITH BAG OF WORDS HEURISTIC
 print 'Bag of words evaluation:'
-question_map = askubuntu_question_map
-samples = askubuntu_dev_samples
+question_map = android_question_map
+samples = android_dev_samples
 
 vocabulary_map = utils.get_vocabulary_map(question_map)
 evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
@@ -154,39 +102,68 @@ evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
 
 
 
+#sample = askubuntu_training_samples[0]
+#print sample
+#embeddings = utils.get_embeddings(askubuntu_question_map[sample.id][0])
+#print embeddings
 
-model = cnn
-encode_fn = encode.encode_cnn
-learning_rate = cnn_learning_rate
+#encoded = encode.encode_cnn_dt_label(cnn_domain_transfer_net, embeddings)
+#domain = encode.encode_cnn_dt_domain(cnn_domain_transfer_net, embeddings)
 
-print askubuntu_dev_samples[0]
-evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map)
+#print encoded
+#print domain
 
-# Trains models
-def midpoint_eval(i):
-    if (i + 1) % 50 == 0:
-        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map) 
-epoch = 0
-while True:
-    epoch += 1
-    print
-    print 'Epoch:', epoch
-    real_train.train_batch(model, encode_fn, askubuntu_training_samples,
-                           learning_rate, askubuntu_question_map,
-                           display_callback, midpoint_eval)
+#def midpoint_eval(i):
+#    if (i + 1) % 200 == 0:
+#        evaluate.evaluate_model(cnn_domain_transfer_net, encode.encode_cnn_dt_label,
+#                                askubuntu_dev_samples, askubuntu_question_map) 
+#    if (i + 1) % 3000 == 0:
+#        evaluate.evaluate_model(cnn_domain_transfer_net, encode.encode_cnn_dt_label,
+#                                android_dev_samples, android_question_map)
+#
+#real_train.train_batch_domain_transfer(cnn_domain_transfer_net,
+#                                       encode.encode_cnn_dt_label, encode.encode_cnn_dt_domain,
+#                                       askubuntu_training_samples,
+#                                       cnn_learning_rate, 
+#                                       askubuntu_question_map, android_question_map,
+#                                       display_callback, midpoint_eval)
 
-#print askubuntu_dev_samples[6]
-#evaluate.evaluate_model(cnn, encode.encode_cnn, [askubuntu_dev_samples[6]], askubuntu_question_map)
-#1/0
 
-print
-print 'EVALUATION'
-print
-print 'Askubuntu dev'
-evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map)
-print 'Askubuntu test'
-evaluate.evaluate_model(model, encode_fn, askubuntu_test_samples, askubuntu_question_map)
-print 'Android dev'
-evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
-print 'Android dev'
+
+#model = cnn
+#encode_fn = encode.encode_cnn
+#learning_rate = cnn_learning_rate
+#
+##print askubuntu_dev_samples[0]
+##evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map)
+#
+## Trains models
+#def midpoint_eval(i):
+#    if (i + 1) % 500 == 0:
+#        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map) 
+#    if (i + 1) % 2000 == 0:
+#        evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
+#epoch = 0
+#while True:
+#    epoch += 1
+#    print
+#    print 'Epoch:', epoch
+#    real_train.train_batch(model, encode_fn, askubuntu_training_samples,
+#                           learning_rate, askubuntu_question_map,
+#                           display_callback, midpoint_eval)
+#
+##print askubuntu_dev_samples[6]
+##evaluate.evaluate_model(cnn, encode.encode_cnn, [askubuntu_dev_samples[6]], askubuntu_question_map)
+##1/0
+#
+#print
+#print 'EVALUATION'
+#print
+#print 'Askubuntu dev'
+#evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map)
+#print 'Askubuntu test'
+#evaluate.evaluate_model(model, encode_fn, askubuntu_test_samples, askubuntu_question_map)
+#print 'Android dev'
+#evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
+#print 'Android dev'
 evaluate.evaluate_model(model, encode_fn, android_test_samples, android_question_map)
