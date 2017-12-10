@@ -24,7 +24,7 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    if len(losses) % 100 == 0:
+    if len(losses) % 1 == 0:
         fig.clear()
         plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
@@ -92,12 +92,12 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 #                        android_dev_samples, android_question_map)
 
 # EVALUATE WITH BAG OF WORDS HEURISTIC
-print 'Bag of words evaluation:'
-question_map = android_question_map
-samples = android_dev_samples
-
-vocabulary_map = utils.get_vocabulary_map(question_map)
-evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
+#print 'Bag of words evaluation:'
+#question_map = android_question_map
+#samples = android_dev_samples
+#
+#vocabulary_map = utils.get_vocabulary_map(question_map)
+#evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
 #######
 
 
@@ -130,40 +130,52 @@ evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
 
 
 
-#model = cnn
-#encode_fn = encode.encode_cnn
-#learning_rate = cnn_learning_rate
-#
-##print askubuntu_dev_samples[0]
-##evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map)
-#
-## Trains models
-#def midpoint_eval(i):
-#    if (i + 1) % 500 == 0:
-#        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map) 
-#    if (i + 1) % 2000 == 0:
-#        evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
-#epoch = 0
-#while True:
-#    epoch += 1
-#    print
-#    print 'Epoch:', epoch
-#    real_train.train_batch(model, encode_fn, askubuntu_training_samples,
-#                           learning_rate, askubuntu_question_map,
-#                           display_callback, midpoint_eval)
-#
-##print askubuntu_dev_samples[6]
-##evaluate.evaluate_model(cnn, encode.encode_cnn, [askubuntu_dev_samples[6]], askubuntu_question_map)
-##1/0
-#
-#print
-#print 'EVALUATION'
-#print
-#print 'Askubuntu dev'
+model = cnn_domain_transfer_net
+encode_label_fn = encode.encode_cnn
+encode_domain_fn = encode.encode_cnn_domain
+optimizer1 = optim.Adam
+optimizer2 = optim.Adam
+learning_rate1 = cnn_learning_rate
+learning_rate2 = -1e-7
+gamma = 1e-5
+batch_size = 10
+num_batches = 100
+
+#print askubuntu_dev_samples[0]
 #evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map)
-#print 'Askubuntu test'
-#evaluate.evaluate_model(model, encode_fn, askubuntu_test_samples, askubuntu_question_map)
-#print 'Android dev'
-#evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
-#print 'Android dev'
-evaluate.evaluate_model(model, encode_fn, android_test_samples, android_question_map)
+
+# Trains models
+def midpoint_eval(i):
+    if (i + 1) % 25 == 0:
+        evaluate.evaluate_model(model, encode_label_fn, askubuntu_dev_samples, askubuntu_question_map) 
+    if (i + 1) % 100 == 0:
+        evaluate.evaluate_model(model, encode_label_fn, android_dev_samples, android_question_map)
+epoch = 0
+while True:
+    epoch += 1
+    print
+    print 'Epoch:', epoch
+    train.train_domain_transfer(model,
+                                encode_label_fn, encode_domain_fn,
+                                optimizer1, optimizer2,
+                                askubuntu_training_samples, batch_size, num_batches,
+                                learning_rate1, learning_rate2,
+                                gamma,
+                                askubuntu_question_map, android_question_map,
+                                display_callback, midpoint_eval)
+
+#print askubuntu_dev_samples[6]
+#evaluate.evaluate_model(cnn, encode.encode_cnn, [askubuntu_dev_samples[6]], askubuntu_question_map)
+#1/0
+
+print
+print 'EVALUATION'
+print
+print 'Askubuntu dev'
+evaluate.evaluate_model(model, encode_label_fn, askubuntu_dev_samples, askubuntu_question_map)
+print 'Askubuntu test'
+evaluate.evaluate_model(model, encode_label_fn, askubuntu_test_samples, askubuntu_question_map)
+print 'Android dev'
+evaluate.evaluate_model(model, encode_label_fn, android_dev_samples, android_question_map)
+print 'Android dev'
+evaluate.evaluate_model(model, encode_label_fn, android_test_samples, android_question_map)
