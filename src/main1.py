@@ -108,27 +108,27 @@ save_name = 'part_1_cnn.pt'
 ##########
 
 
-model = torch.load('part_1_cnn.pt 692')
-print '\nMODEL LOADED\n'
+#model = torch.load('part_1_cnn.pt')
+#print '\nMODEL LOADED\n'
 
 
 ##########
 # Trains models
-#def midpoint_eval(batch):
-#    if (batch + 1) % 300 == 0:
-#        print 'Askubuntu dev'
-#        evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)
-#        print 'Askubuntu test'
-#        evaluate.evaluate_model(model, encode_fn, test_samples, question_map)
-#        torch.save(model, save_name)
-#        print '\nMODEL SAVED\n'
-#        
-#train.train(model, encode_fn, optimizer, training_samples,
-#            batch_size, num_batches, learning_rate,
-#            question_map, display_callback, midpoint_eval)
-#
-#torch.save(model, save_name)
-#print '\nMODEL SAVED\n'
+def midpoint_eval(batch):
+    if (batch + 1) % 300 == 0:
+        print 'Askubuntu dev'
+        evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)
+        print 'Askubuntu test'
+        evaluate.evaluate_model(model, encode_fn, test_samples, question_map)
+        torch.save(model, save_name)
+        print '\nMODEL SAVED\n'
+        
+train.train(model, encode_fn, optimizer, training_samples,
+            batch_size, num_batches, learning_rate,
+            question_map, display_callback, midpoint_eval)
+
+torch.save(model, save_name)
+print '\nMODEL SAVED\n'
 
         
 print
