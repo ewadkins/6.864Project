@@ -74,15 +74,41 @@ training_samples, dev_samples, test_samples, question_map, embedding_map = data_
 # MAIN                                          #
 #################################################
 
+train_indefinitely = False
 
-model = lstm
-encode_fn = encode.encode_lstm
-optimizer = optim.SGD
-learning_rate = lstm_learning_rate
+##########
+##########
+##########
+# Uncomment for part 1.2.2.1: CNN
+model = cnn
+encode_fn = encode.encode_cnn
+optimizer = optim.Adam
+learning_rate = cnn_learning_rate
 batch_size = 10
 num_batches = 100
+##########
+##########
+##########
 
 
+
+##########
+##########
+##########
+# Uncomment for part 1.2.2.2: LSTM
+#model = lstm
+#encode_fn = encode.encode_lstm
+#optimizer = optim.SGD
+#learning_rate = lstm_learning_rate
+#batch_size = 10
+#num_batches = 100
+##########
+##########
+##########
+
+
+
+##########
 # Trains models
 def midpoint_eval(batch):
     if (batch + 1) % 10 == 0:
@@ -91,6 +117,11 @@ def midpoint_eval(batch):
 train.train(model, encode_fn, optimizer, training_samples,
             batch_size, num_batches, learning_rate,
             question_map, display_callback, midpoint_eval)
+if train_indefinitely:
+    while True:
+        train.train(model, encode_fn, optimizer, training_samples,
+                    batch_size, num_batches, learning_rate,
+                    question_map, display_callback, midpoint_eval)
 print
 print 'EVALUATION'
 print
