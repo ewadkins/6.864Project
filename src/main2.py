@@ -144,23 +144,23 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 # Uncomment for part 2.3.1.b: Train on askubuntu and evaluate android, no transfer learning
-model = cnn
-encode_fn = encode.encode_cnn
-optimizer = optim.Adam
-learning_rate = cnn_learning_rate
-batch_size = 10
-num_batches = 100
-def midpoint_eval(batch):
-    if (batch + 1) % 25 == 0:
-        print 'Evaluation of askubuntu dev'
-        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map) 
-    if (batch + 1) % 100 == 0:
-        print 'Evaluation of android dev'
-        evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
-        
-train.train(model, encode_fn, optimizer, askubuntu_training_samples,
-            batch_size, num_batches, learning_rate,
-            askubuntu_question_map, display_callback, midpoint_eval)
+#model = cnn
+#encode_fn = encode.encode_cnn
+#optimizer = optim.Adam
+#learning_rate = cnn_learning_rate
+#batch_size = 10
+#num_batches = 100
+#def midpoint_eval(batch):
+#    if (batch + 1) % 25 == 0:
+#        print 'Evaluation of askubuntu dev'
+#        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map) 
+#    if (batch + 1) % 100 == 0:
+#        print 'Evaluation of android dev'
+#        evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
+#        
+#train.train(model, encode_fn, optimizer, askubuntu_training_samples,
+#            batch_size, num_batches, learning_rate,
+#            askubuntu_question_map, display_callback, midpoint_eval)
 ##########
 ##########
 ##########
@@ -171,31 +171,31 @@ train.train(model, encode_fn, optimizer, askubuntu_training_samples,
 ##########
 ##########
 # Uncomment for part 2.3.3.1: Evaluate with domain transfer
-#model = cnn_domain_transfer_net
-#encode_fn = encode.encode_cnn
-#encode_domain_fn = encode.encode_cnn_domain
-#optimizer1 = optim.Adam
-#optimizer2 = optim.Adam
-#learning_rate1 = cnn_learning_rate
-#learning_rate2 = -1e-7
-#gamma = 1e-5
-#batch_size = 10
-#num_batches = 100
-#def midpoint_eval(batch):
-#    if (batch + 1) % 25 == 0:
-#        print 'Evaluation of askubuntu dev'
-#        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map) 
-#    if (batch + 1) % 100 == 0:
-#        print 'Evaluation of android dev'
-#        evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
-#train.train_domain_transfer(model,
-#                            encode_fn, encode_domain_fn,
-#                            optimizer1, optimizer2,
-#                            askubuntu_training_samples, batch_size, num_batches,
-#                            learning_rate1, learning_rate2,
-#                            gamma,
-#                            askubuntu_question_map, android_question_map,
-#                            display_callback, midpoint_eval)
+model = cnn_domain_transfer_net
+encode_fn = encode.encode_cnn
+encode_domain_fn = encode.encode_cnn_domain
+optimizer1 = optim.Adam
+optimizer2 = optim.Adam
+learning_rate1 = cnn_learning_rate
+learning_rate2 = -1e-7
+gamma = 1e-5
+batch_size = 10
+num_batches = 100
+def midpoint_eval(batch):
+    if (batch + 1) % 25 == 0:
+        print 'Evaluation of askubuntu dev'
+        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map) 
+    if (batch + 1) % 100 == 0:
+        print 'Evaluation of android dev'
+        evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
+train.train_domain_transfer(model,
+                            encode_fn, encode_domain_fn,
+                            optimizer1, optimizer2,
+                            askubuntu_training_samples, batch_size, num_batches,
+                            learning_rate1, learning_rate2,
+                            gamma,
+                            askubuntu_question_map, android_question_map,
+                            display_callback, midpoint_eval)
 ##########
 ##########
 ##########
