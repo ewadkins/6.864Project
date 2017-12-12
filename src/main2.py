@@ -120,29 +120,6 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 ##########
-# Uncomment for part 2.3.3.1: Evaluate with domain transfer
-#def midpoint_eval(i):
-#    if (i + 1) % 200 == 0:
-#        evaluate.evaluate_model(cnn_domain_transfer_net, encode.encode_cnn_dt_label,
-#                                askubuntu_dev_samples, askubuntu_question_map) 
-#    if (i + 1) % 3000 == 0:
-#        evaluate.evaluate_model(cnn_domain_transfer_net, encode.encode_cnn_dt_label,
-#                                android_dev_samples, android_question_map)
-#train.train_batch_domain_transfer(cnn_domain_transfer_net,
-#                                       encode.encode_cnn_dt_label, encode.encode_cnn_dt_domain,
-#                                       askubuntu_training_samples,
-#                                       cnn_learning_rate, 
-#                                       askubuntu_question_map, android_question_map,
-#                                       display_callback, midpoint_eval)
-##########
-##########
-##########
-
-
-
-##########
-##########
-##########
 # Uncomment for part 2.3.1.b: Train on askubuntu and evaluate android, no transfer learning
 #model = cnn
 #encode_fn = encode.encode_cnn

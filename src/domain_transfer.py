@@ -2,14 +2,14 @@ import torch.nn as nn
 import torch
 
 
-class GradientReversal(torch.autograd.Function):
-    @staticmethod
-    def forward(ctx, x):
-        return x.view_as(x)
-
-    @staticmethod
-    def backward(ctx, grad_output):
-        return grad_output.neg()
+#class GradientReversal(torch.autograd.Function):
+#    @staticmethod
+#    def forward(ctx, x):
+#        return x.view_as(x)
+#
+#    @staticmethod
+#    def backward(ctx, grad_output):
+#        return grad_output.neg()
 
 
 class DomainTransferNet(nn.Module):

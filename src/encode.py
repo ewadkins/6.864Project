@@ -73,8 +73,6 @@ def encode_cnn(net, q_id, question_map):
                 torch.FloatTensor(embeddings)), 0, 1).unsqueeze(0)
             return net(input).squeeze()
         def get_embeddings(title, body):
-            print utils.get_embeddings(title)
-            print utils.get_embeddings(body)
             return utils.get_embeddings(title), utils.get_embeddings(body)
         title_embeddings, body_embeddings = get_embeddings(*question_map[q_id])
         title = encode(net, title_embeddings)
