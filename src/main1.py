@@ -18,7 +18,7 @@ import evaluate
 # LSTM configuration
 
 lstm_input_size = 200
-lstm_hidden_size = 300
+lstm_hidden_size = 240
 lstm_num_layers = 1
 
 lstm_learning_rate = 1e-1
