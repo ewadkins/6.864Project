@@ -14,8 +14,8 @@ def encode_lstm(net, q_id, question_map):
         def encode(net, embeddings):
             if len(embeddings) == 0:
                 return None
-            state = (Variable(torch.zeros(1, 1, state_size)),
-                     Variable(torch.zeros(1, 1, state_size)))
+            state = (Variable(torch.zeros(2, 1, state_size)),
+                     Variable(torch.zeros(2, 1, state_size)))
             out, state = net(Variable(
                 torch.FloatTensor(embeddings)).view(len(embeddings), 1, -1), state)
             return state

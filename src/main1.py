@@ -26,7 +26,8 @@ lstm_learning_rate = 1e-1
 lstm = nn.LSTM(
     lstm_input_size,
     lstm_hidden_size,
-    lstm_num_layers)
+    lstm_num_layers,
+    bidirectional=True)
 
 print lstm
 print
@@ -60,7 +61,7 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    if len(losses) % 50 == 0:
+    if len(losses) % 5 == 0:
         fig.clear()
         plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
@@ -79,13 +80,13 @@ training_samples, dev_samples, test_samples, question_map, embedding_map = data_
 ##########
 ##########
 # Uncomment for part 1.2.2.1: CNN
-model = cnn
-encode_fn = encode.encode_cnn
-optimizer = optim.Adam
-learning_rate = cnn_learning_rate
-batch_size = 1
-num_batches = 12000
-save_name = 'part_1_cnn.pt'
+#model = cnn
+#encode_fn = encode.encode_cnn
+#optimizer = optim.Adam
+#learning_rate = cnn_learning_rate
+#batch_size = 1
+#num_batches = 12000
+#save_name = 'part_1_cnn.pt'
 ##########
 ##########
 ##########
@@ -96,13 +97,13 @@ save_name = 'part_1_cnn.pt'
 ##########
 ##########
 # Uncomment for part 1.2.2.2: LSTM
-#model = lstm
-#encode_fn = encode.encode_lstm
-#optimizer = optim.SGD
-#learning_rate = lstm_learning_rate
-#batch_size = 10
-#num_batches = 100
-#save_name = 'part_1_lstm.pt'
+model = lstm
+encode_fn = encode.encode_lstm
+optimizer = optim.SGD
+learning_rate = lstm_learning_rate
+batch_size = 10
+num_batches = 1200
+save_name = 'part_1_lstm.pt'
 ##########
 ##########
 ##########
@@ -115,20 +116,20 @@ save_name = 'part_1_cnn.pt'
 ##########
 # Trains models
 def midpoint_eval(batch):
-    if (batch + 1) % 300 == 0:
+    if (batch + 1) % 50 == 0:
         print 'Askubuntu dev'
         evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)
         print 'Askubuntu test'
         evaluate.evaluate_model(model, encode_fn, test_samples, question_map)
-        torch.save(model, save_name)
-        print '\nMODEL SAVED\n'
+        #torch.save(model, save_name)
+        #print '\nMODEL SAVED\n'
         
 train.train(model, encode_fn, optimizer, training_samples,
             batch_size, num_batches, learning_rate,
             question_map, display_callback, midpoint_eval)
 
-torch.save(model, save_name)
-print '\nMODEL SAVED\n'
+#torch.save(model, save_name)
+#print '\nMODEL SAVED\n'
 
         
 print
