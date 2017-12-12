@@ -31,7 +31,9 @@ def evaluate_model(net, encode, samples, question_map):
             candidate_encoded = encode(net, candidate_id, question_map)
 
             # Compare similarity
-            similarity = criterion(encoded.unsqueeze(0), candidate_encoded.unsqueeze(0)).data[0]
+            similarity = criterion(
+                encoded.unsqueeze(0),
+                candidate_encoded.unsqueeze(0)).data[0]
             results.append((1.0 - similarity, candidate_id))
 
         results.sort()
@@ -86,7 +88,8 @@ def evaluate_bag_of_words(samples, question_map, vocabulary_map):
             candidate_text = transform(candidate_title, candidate_body)
 
             encoded = encode.encode_bag_of_words(sample_text, vocabulary_map)
-            candidate_encoded = encode.encode_bag_of_words(candidate_text, vocabulary_map)
+            candidate_encoded = encode.encode_bag_of_words(
+                candidate_text, vocabulary_map)
 
             # Compare similarity
             difference = criterion(
@@ -98,10 +101,10 @@ def evaluate_bag_of_words(samples, question_map, vocabulary_map):
             results.append((difference, candidate_id))
 
         results.sort()
-        #print results
+        # print results
         scores = map(lambda x: x[0], results)
         results = map(lambda x: x[1], results)
-        #print results
+        # print results
         results_matrix.append(results)
         scores_matrix.append(scores)
 
@@ -174,9 +177,12 @@ def area_under_curve_fpr(samples, results_matrix, scores_matrix, max_fpr):
         results = results_matrix[i]
         scores = scores_matrix[i]
         relevant = set(sample.similar)
-        targets = [1 if results[i] in relevant else 0 for i in range(len(results))]
+        targets = [
+            1 if results[i] in relevant else 0 for i in range(
+                len(results))]
         auc_meter.add(torch.FloatTensor(scores), torch.LongTensor(targets))
     return auc_meter.value(max_fpr)
+
 
 def area_under_curve_fpr2(sample, results, scores, max_fpr):
     relevant = set(sample.similar)
@@ -191,6 +197,7 @@ def mean_fn(samples, results_matrix, fn, *varargs):
     x = map(lambda s_r: fn(s_r[0], s_r[1], *varargs),
             zip(samples, results_matrix))
     return sum(x) / len(x)
+
 
 def mean_fn2(samples, results_matrix, scores_matrix, fn, *varargs):
     x = map(lambda s_r: fn(s_r[0], s_r[1], s_r[2], *varargs),
@@ -219,7 +226,12 @@ def mean_area_under_curve(samples, results_matrix):
 
 
 def mean_area_under_curve_fpr(samples, results_matrix, scores_matrix, max_fpr):
-    return mean_fn2(samples, results_matrix, scores_matrix, area_under_curve_fpr2, max_fpr)
+    return mean_fn2(
+        samples,
+        results_matrix,
+        scores_matrix,
+        area_under_curve_fpr2,
+        max_fpr)
 
 
 # training_samples = utils.load_samples('../data/train_random.txt')

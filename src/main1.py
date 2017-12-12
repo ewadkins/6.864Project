@@ -35,6 +35,7 @@ print
 #################################################
 # CNN configuration
 
+
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
@@ -44,7 +45,8 @@ class CNN(nn.Module):
         x = F.tanh(self.conv(x))
         x = F.avg_pool1d(x, x.size()[-1])
         return x.squeeze(2)
-    
+
+
 cnn_learning_rate = 1e-5
 
 cnn = CNN()
@@ -65,11 +67,13 @@ def display_callback(loss):
         fig.clear()
         plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
-        
+
 #################################################
 # Data loading
 
-training_samples, dev_samples, test_samples, question_map, embedding_map = data_loader1.init()
+
+training_samples, dev_samples, test_samples, question_map, embedding_map =\
+    data_loader1.init()
 
 #################################################
 # MAIN                                          #
@@ -80,17 +84,16 @@ training_samples, dev_samples, test_samples, question_map, embedding_map = data_
 ##########
 ##########
 # Uncomment for part 1.2.2.1: CNN
-#model = cnn
-#encode_fn = encode.encode_cnn
-#optimizer = optim.Adam
-#learning_rate = cnn_learning_rate
-#batch_size = 1
-#num_batches = 12000
-#save_name = 'part_1_cnn.pt'
+# model = cnn
+# encode_fn = encode.encode_cnn
+# optimizer = optim.Adam
+# learning_rate = cnn_learning_rate
+# batch_size = 1
+# num_batches = 12000
+# save_name = 'part_1_cnn.pt'
 ##########
 ##########
 ##########
-
 
 
 ##########
@@ -109,8 +112,8 @@ save_name = 'part_1_lstm.pt'
 ##########
 
 
-#model = torch.load('part_1_cnn.pt')
-#print '\nMODEL LOADED\n'
+# model = torch.load('part_1_cnn.pt')
+# print '\nMODEL LOADED\n'
 
 
 ##########
@@ -121,17 +124,18 @@ def midpoint_eval(batch):
         evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)
         print 'Askubuntu test'
         evaluate.evaluate_model(model, encode_fn, test_samples, question_map)
-        #torch.save(model, save_name)
-        #print '\nMODEL SAVED\n'
-        
+        # torch.save(model, save_name)
+        # print '\nMODEL SAVED\n'
+
+
 train.train(model, encode_fn, optimizer, training_samples,
             batch_size, num_batches, learning_rate,
             question_map, display_callback, midpoint_eval)
 
-#torch.save(model, save_name)
-#print '\nMODEL SAVED\n'
+# torch.save(model, save_name)
+# print '\nMODEL SAVED\n'
 
-        
+
 print
 print 'EVALUATION'
 print
