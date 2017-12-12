@@ -220,7 +220,7 @@ evaluate.evaluate_model(
     encode_fn,
     android_dev_samples,
     android_question_map)
-print 'Evaluation of askubuntu test'
+print 'Evaluation of android test'
 evaluate.evaluate_model(
     model,
     encode_fn,
