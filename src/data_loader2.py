@@ -1,5 +1,6 @@
 import utils
 
+
 def init():
     print 'Loading askubuntu training samples..'
     askubuntu_training_samples = utils.load_samples(

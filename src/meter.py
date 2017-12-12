@@ -9,6 +9,7 @@ import numbers
 import numpy as np
 import torch
 
+
 class Meter(object):
     def reset(self):
         pass
@@ -23,18 +24,21 @@ class Meter(object):
 class AUCMeter(Meter):
     """
     The AUCMeter measures the area under the receiver-operating characteristic
-    (ROC) curve for binary classification problems. The area under the curve (AUC)
-    can be interpreted as the probability that, given a randomly selected positive
-    example and a randomly selected negative example, the positive example is
-    assigned a higher score by the classification model than the negative example.
+    (ROC) curve for binary classification problems. The area under the curve
+    (AUC) can be interpreted as the probability that, given a randomly
+    selected positive example and a randomly selected negative example, the
+    positive example is assigned a higher score by the classification model
+    than the negative example.
 
     The AUCMeter is designed to operate on one-dimensional Tensors `output`
-    and `target`, where (1) the `output` contains model output scores that ought to
-    be higher when the model is more convinced that the example should be positively
-    labeled, and smaller when the model believes the example should be negatively
-    labeled (for instance, the output of a signoid function); and (2) the `target`
-    contains only values 0 (for negative examples) and 1 (for positive examples).
+    and `target`, where (1) the `output` contains model output scores that
+    ought to be higher when the model is more convinced that the example
+    should be positively labeled, and smaller when the model believes the
+    example should be negatively labeled (for instance, the output of a
+    signoid function); and (2) the `target` contains only values 0 (for
+    negative examples) and 1 (for positive examples).
     """
+
     def __init__(self):
         super(AUCMeter, self).__init__()
         self.reset()
@@ -63,7 +67,6 @@ class AUCMeter(Meter):
         self.targets = np.append(self.targets, target)
         self.sortind = None
 
-
     def value(self, max_fpr=1.0):
         assert max_fpr > 0
 
@@ -73,7 +76,9 @@ class AUCMeter(Meter):
 
         # sorting the arrays
         if self.sortind is None:
-            scores, sortind = torch.sort(torch.from_numpy(self.scores), dim=0, descending=True)
+            scores, sortind = torch.sort(
+                torch.from_numpy(
+                    self.scores), dim=0, descending=True)
             scores = scores.numpy()
             self.sortind = sortind.numpy()
         else:
@@ -99,7 +104,7 @@ class AUCMeter(Meter):
                 break
 
         # calculating area under curve using trapezoidal rule
-        #n = tpr.shape[0]
+        # n = tpr.shape[0]
         h = fpr[1:n] - fpr[0:n - 1]
         sum_h = np.zeros(fpr.shape)
         sum_h[0:n - 1] = h

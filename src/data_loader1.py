@@ -1,5 +1,6 @@
 import utils
 
+
 def init():
     print 'Loading training samples..'
     training_samples = utils.load_samples('../data/askubuntu/train_random.txt')

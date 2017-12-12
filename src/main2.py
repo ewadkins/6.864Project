@@ -32,6 +32,7 @@ def display_callback(loss):
 #################################################
 # LSTM configuration
 
+
 lstm_input_size = 200
 lstm_hidden_size = 240
 lstm_num_layers = 1
@@ -49,6 +50,7 @@ print
 #################################################
 # CNN configuration
 
+
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
@@ -58,6 +60,7 @@ class CNN(nn.Module):
         x = F.tanh(self.conv(x))
         x = F.avg_pool1d(x, x.size()[-1])
         return x.squeeze(2)
+
 
 cnn_learning_rate = 1e-5
 
@@ -91,57 +94,56 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 # Uncomment for part 2.3.1.a.1: Evaluate bag of words on Askubuntu dataset
-#print 'Bag of words evaluation askubuntu:'
-#question_map = askubuntu_question_map
-#samples = askubuntu_dev_samples
-#vocabulary_map = utils.get_vocabulary_map(question_map)
-#evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
+# print 'Bag of words evaluation askubuntu:'
+# question_map = askubuntu_question_map
+# samples = askubuntu_dev_samples
+# vocabulary_map = utils.get_vocabulary_map(question_map)
+# evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
 ##########
 ##########
 ##########
-
 
 
 ##########
 ##########
 ##########
 # Uncomment for part 2.3.1.a.2: Evaluate bag of words on Android dataset
-#print 'Bag of words evaluation android:'
-#question_map = android_question_map
-#samples = android_dev_samples
-#vocabulary_map = utils.get_vocabulary_map(question_map)
-#evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
+# print 'Bag of words evaluation android:'
+# question_map = android_question_map
+# samples = android_dev_samples
+# vocabulary_map = utils.get_vocabulary_map(question_map)
+# evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
 ##########
 ##########
 ##########
-
 
 
 ##########
 ##########
 ##########
 # Uncomment for part 2.3.1.b: Train on askubuntu and evaluate android, no transfer learning
-#model = cnn
-#encode_fn = encode.encode_cnn
-#optimizer = optim.Adam
-#learning_rate = cnn_learning_rate
-#batch_size = 10
-#num_batches = 100
-#def midpoint_eval(batch):
+# model = cnn
+# encode_fn = encode.encode_cnn
+# optimizer = optim.Adam
+# learning_rate = cnn_learning_rate
+# batch_size = 10
+# num_batches = 100
+# def midpoint_eval(batch):
 #    if (batch + 1) % 25 == 0:
 #        print 'Evaluation of askubuntu dev'
-#        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map) 
+#        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples,
+#            askubuntu_question_map)
 #    if (batch + 1) % 100 == 0:
 #        print 'Evaluation of android dev'
-#        evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
-#        
-#train.train(model, encode_fn, optimizer, askubuntu_training_samples,
+#        evaluate.evaluate_model(model, encode_fn, android_dev_samples,
+#            android_question_map)
+#
+# train.train(model, encode_fn, optimizer, askubuntu_training_samples,
 #            batch_size, num_batches, learning_rate,
 #            askubuntu_question_map, display_callback, midpoint_eval)
 ##########
 ##########
 ##########
-
 
 
 ##########
@@ -158,21 +160,39 @@ learning_rate2 = -1e-7
 gamma = 1e-5
 batch_size = 10
 num_batches = 100
+
 def midpoint_eval(batch):
     if (batch + 1) % 25 == 0:
         print 'Evaluation of askubuntu dev'
-        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map) 
+        evaluate.evaluate_model(
+            model,
+            encode_fn,
+            askubuntu_dev_samples,
+            askubuntu_question_map)
     if (batch + 1) % 100 == 0:
         print 'Evaluation of android dev'
-        evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
-train.train_domain_transfer(model,
-                            encode_fn, encode_domain_fn,
-                            optimizer1, optimizer2,
-                            askubuntu_training_samples, batch_size, num_batches,
-                            learning_rate1, learning_rate2,
-                            gamma,
-                            askubuntu_question_map, android_question_map,
-                            display_callback, midpoint_eval)
+        evaluate.evaluate_model(
+            model,
+            encode_fn,
+            android_dev_samples,
+            android_question_map)
+
+train.train_domain_transfer(
+    model,
+    encode_fn,
+    encode_domain_fn,
+    optimizer1,
+    optimizer2,
+    askubuntu_training_samples,
+    batch_size,
+    num_batches,
+    learning_rate1,
+    learning_rate2,
+    gamma,
+    askubuntu_question_map,
+    android_question_map,
+    display_callback,
+    midpoint_eval)
 ##########
 ##########
 ##########
@@ -183,10 +203,26 @@ print
 print 'EVALUATION'
 print
 print 'Evaluation of askubuntu dev'
-evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples, askubuntu_question_map)
+evaluate.evaluate_model(
+    model,
+    encode_fn,
+    askubuntu_dev_samples,
+    askubuntu_question_map)
 print 'Evaluation of askubuntu test'
-evaluate.evaluate_model(model, encode_fn, askubuntu_test_samples, askubuntu_question_map)
+evaluate.evaluate_model(
+    model,
+    encode_fn,
+    askubuntu_test_samples,
+    askubuntu_question_map)
 print 'Evaluation of android dev'
-evaluate.evaluate_model(model, encode_fn, android_dev_samples, android_question_map)
+evaluate.evaluate_model(
+    model,
+    encode_fn,
+    android_dev_samples,
+    android_question_map)
 print 'Evaluation of askubuntu test'
-evaluate.evaluate_model(model, encode_fn, android_test_samples, android_question_map)
+evaluate.evaluate_model(
+    model,
+    encode_fn,
+    android_test_samples,
+    android_question_map)
