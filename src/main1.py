@@ -18,7 +18,7 @@ import evaluate
 # LSTM configuration
 
 lstm_input_size = 200
-lstm_hidden_size = 300
+lstm_hidden_size = 240
 lstm_num_layers = 1
 
 lstm_learning_rate = 1e-1
@@ -60,7 +60,7 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    if len(losses) % 50 == 0:
+    if len(losses) % 1 == 0:
         fig.clear()
         plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
@@ -79,13 +79,13 @@ training_samples, dev_samples, test_samples, question_map, embedding_map = data_
 ##########
 ##########
 # Uncomment for part 1.2.2.1: CNN
-model = cnn
-encode_fn = encode.encode_cnn
-optimizer = optim.Adam
-learning_rate = cnn_learning_rate
-batch_size = 1
-num_batches = 12000
-save_name = 'part_1_cnn.pt'
+#model = cnn
+#encode_fn = encode.encode_cnn
+#optimizer = optim.Adam
+#learning_rate = cnn_learning_rate
+#batch_size = 20
+#num_batches = 12000
+#save_name = 'part_1_cnn.pt'
 ##########
 ##########
 ##########
@@ -96,13 +96,13 @@ save_name = 'part_1_cnn.pt'
 ##########
 ##########
 # Uncomment for part 1.2.2.2: LSTM
-#model = lstm
-#encode_fn = encode.encode_lstm
-#optimizer = optim.SGD
-#learning_rate = lstm_learning_rate
-#batch_size = 10
-#num_batches = 100
-#save_name = 'part_1_lstm.pt'
+model = lstm
+encode_fn = encode.encode_lstm
+optimizer = optim.SGD
+learning_rate = lstm_learning_rate
+batch_size = 20
+num_batches = 1000
+save_name = 'part_1_lstm.pt'
 ##########
 ##########
 ##########
@@ -115,7 +115,7 @@ save_name = 'part_1_cnn.pt'
 ##########
 # Trains models
 def midpoint_eval(batch):
-    if (batch + 1) % 300 == 0:
+    if (batch + 1) % 20 == 0:
         print 'Askubuntu dev'
         evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)
         print 'Askubuntu test'
