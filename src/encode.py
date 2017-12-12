@@ -10,6 +10,7 @@ import utils
 
 use_body = False
 
+
 def encode_lstm(net, q_id, question_map):
     state_size = net.hidden_size
     def encode(net, embeddings):
