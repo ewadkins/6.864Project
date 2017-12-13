@@ -6,6 +6,7 @@ import torch.optim as optim
 from torch.autograd import Variable
 import random
 import matplotlib.pyplot as plt
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 import data_loader2
 import utils
@@ -62,7 +63,7 @@ class CNN(nn.Module):
         return x.squeeze(2)
 
 
-cnn_learning_rate = 1e-5
+cnn_learning_rate = 1e-1
 
 cnn = CNN()
 
@@ -90,15 +91,35 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 #################################################
 
 
+#question_map = askubuntu_question_map
+#samples1 = askubuntu_dev_samples
+#samples2 = askubuntu_test_samples
+#
+#tfidf = TfidfVectorizer(min_df=1)
+#corpus_texts = map(lambda (t, b): t + ' ' + b, question_map.values())
+#tfidf.fit(corpus_texts)
+#
+#print 'TFIDF-weighted bag of word booleans evaluation askubuntu dev:'
+#evaluate.evaluate_directly(samples1, encode.encode_tfidf_bag_of_word_booleans,
+#                           question_map, tfidf)
+#print 'TFIDF-weighted bag of word booleans evaluation askubuntu test:'
+#evaluate.evaluate_directly(samples2, encode.encode_tfidf_bag_of_word_booleans,
+#                           question_map, tfidf)
+
+
+
 ##########
 ##########
 ##########
-# Uncomment for part 2.3.1.a.1: Evaluate bag of words on Askubuntu dataset
-# print 'Bag of words evaluation askubuntu:'
-# question_map = askubuntu_question_map
-# samples = askubuntu_dev_samples
-# vocabulary_map = utils.get_vocabulary_map(question_map)
-# evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
+# Uncomment for part 2.3.1.a.1.1: Evaluate bag of word booleans on Askubuntu dataset
+#question_map = askubuntu_question_map
+#samples1 = askubuntu_dev_samples
+#samples2 = askubuntu_test_samples
+#vocabulary_map = utils.get_vocabulary_map(question_map)
+#print 'Bag of word booleans evaluation askubuntu dev:'
+#evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
+#print 'Bag of word booleans evaluation askubuntu test:'
+#evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
 ##########
 ##########
 ##########
@@ -107,12 +128,15 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 ##########
-# Uncomment for part 2.3.1.a.2: Evaluate bag of words on Android dataset
-# print 'Bag of words evaluation android:'
-# question_map = android_question_map
-# samples = android_dev_samples
-# vocabulary_map = utils.get_vocabulary_map(question_map)
-# evaluate.evaluate_bag_of_words(samples, question_map, vocabulary_map)
+# Uncomment for part 2.3.1.a.1.2: Evaluate bag of word counts on Askubuntu dataset
+#question_map = askubuntu_question_map
+#samples1 = askubuntu_dev_samples
+#samples2 = askubuntu_test_samples
+#vocabulary_map = utils.get_vocabulary_map(question_map)
+#print 'Bag of word counts evaluation askubuntu dev:'
+#evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
+#print 'Bag of word counts evaluation askubuntu test:'
+#evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
 ##########
 ##########
 ##########
@@ -121,14 +145,86 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 ##########
-# Uncomment for part 2.3.1.b: Train on askubuntu and evaluate android, no transfer learning
-# model = cnn
-# encode_fn = encode.encode_cnn
-# optimizer = optim.Adam
-# learning_rate = cnn_learning_rate
-# batch_size = 10
-# num_batches = 100
-# def midpoint_eval(batch):
+# Uncomment for part 2.3.1.a.1.3: Evaluate mean embeddings on Askubuntu dataset
+#question_map = askubuntu_question_map
+#samples1 = askubuntu_dev_samples
+#samples2 = askubuntu_test_samples
+#vocabulary_map = utils.get_vocabulary_map(question_map)
+#print 'Mean embeddings evaluation askubuntu dev:'
+#evaluate.evaluate_directly(samples1, encode.encode_mean_embeddings, question_map, embedding_map)
+#print 'Mean embeddings evaluation askubuntu test:'
+#evaluate.evaluate_directly(samples2, encode.encode_mean_embeddings, question_map, embedding_map)
+##########
+##########
+##########
+
+
+##########
+##########
+##########
+# Uncomment for part 2.3.1.a.2.1: Evaluate bag of word booleans on Android dataset
+#question_map = android_question_map
+#samples1 = android_dev_samples
+#samples2 = android_test_samples
+#vocabulary_map = utils.get_vocabulary_map(question_map)
+#print 'Bag of word booleans evaluation android dev:'
+#evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
+#print 'Bag of word booleans evaluation android test:'
+#evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
+##########
+##########
+##########
+
+
+##########
+##########
+##########
+# Uncomment for part 2.3.1.a.2.2: Evaluate bag of word counts on Android dataset
+#question_map = android_question_map
+#samples1 = android_dev_samples
+#samples2 = android_test_samples
+#vocabulary_map = utils.get_vocabulary_map(question_map)
+#print 'Bag of word counts evaluation android dev:'
+#evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
+#print 'Bag of word counts evaluation android test:'
+#evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
+##########
+##########
+##########
+
+
+##########
+##########
+##########
+# Uncomment for part 2.3.1.a.2.3: Evaluate mean embeddings on Android dataset
+#question_map = android_question_map
+#samples1 = android_dev_samples
+#samples2 = android_test_samples
+#vocabulary_map = utils.get_vocabulary_map(question_map)
+#print 'Mean embeddings evaluation android dev:'
+#evaluate.evaluate_directly(samples1, encode.encode_mean_embeddings, question_map, embedding_map)
+#print 'Mean embeddings evaluation android test:'
+#evaluate.evaluate_directly(samples2, encode.encode_mean_embeddings, question_map, embedding_map)
+##########
+##########
+##########
+
+
+##########
+##########
+##########
+# Uncomment for part 2.3.1.b.1: Train on askubuntu, no transfer learning
+#model = cnn
+#encode_fn = encode.encode_cnn
+#optimizer = optim.Adam
+#learning_rate = cnn_learning_rate
+#batch_size = 10
+#num_batches = 100
+#
+#model = torch.load('part_1_cnn.pt39000')
+#print '\nMODEL LOADED\n'
+
+#def midpoint_eval(batch):
 #    if (batch + 1) % 25 == 0:
 #        print 'Evaluation of askubuntu dev'
 #        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples,
@@ -138,7 +234,7 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 #        evaluate.evaluate_model(model, encode_fn, android_dev_samples,
 #            android_question_map)
 #
-# train.train(model, encode_fn, optimizer, askubuntu_training_samples,
+#train.train(model, encode_fn, optimizer, askubuntu_training_samples,
 #            batch_size, num_batches, learning_rate,
 #            askubuntu_question_map, display_callback, midpoint_eval)
 ##########
@@ -150,79 +246,79 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 # Uncomment for part 2.3.3.1: Evaluate with domain transfer
-model = cnn_domain_transfer_net
-encode_fn = encode.encode_cnn
-encode_domain_fn = encode.encode_cnn_domain
-optimizer1 = optim.Adam
-optimizer2 = optim.Adam
-learning_rate1 = cnn_learning_rate
-learning_rate2 = -1e-7
-gamma = 1e-5
-batch_size = 10
-num_batches = 100
-
-def midpoint_eval(batch):
-    if (batch + 1) % 25 == 0:
-        print 'Evaluation of askubuntu dev'
-        evaluate.evaluate_model(
-            model,
-            encode_fn,
-            askubuntu_dev_samples,
-            askubuntu_question_map)
-    if (batch + 1) % 100 == 0:
-        print 'Evaluation of android dev'
-        evaluate.evaluate_model(
-            model,
-            encode_fn,
-            android_dev_samples,
-            android_question_map)
-
-train.train_domain_transfer(
-    model,
-    encode_fn,
-    encode_domain_fn,
-    optimizer1,
-    optimizer2,
-    askubuntu_training_samples,
-    batch_size,
-    num_batches,
-    learning_rate1,
-    learning_rate2,
-    gamma,
-    askubuntu_question_map,
-    android_question_map,
-    display_callback,
-    midpoint_eval)
+#model = cnn_domain_transfer_net
+#encode_fn = encode.encode_cnn
+#encode_domain_fn = encode.encode_cnn_domain
+#optimizer1 = optim.Adam
+#optimizer2 = optim.Adam
+#learning_rate1 = cnn_learning_rate
+#learning_rate2 = -1e-7
+#gamma = 1e-5
+#batch_size = 10
+#num_batches = 100
+#
+#def midpoint_eval(batch):
+#    if (batch + 1) % 25 == 0:
+#        print 'Evaluation of askubuntu dev'
+#        evaluate.evaluate_model(
+#            model,
+#            encode_fn,
+#            askubuntu_dev_samples,
+#            askubuntu_question_map)
+#    if (batch + 1) % 100 == 0:
+#        print 'Evaluation of android dev'
+#        evaluate.evaluate_model(
+#            model,
+#            encode_fn,
+#            android_dev_samples,
+#            android_question_map)
+#
+#train.train_domain_transfer(
+#    model,
+#    encode_fn,
+#    encode_domain_fn,
+#    optimizer1,
+#    optimizer2,
+#    askubuntu_training_samples,
+#    batch_size,
+#    num_batches,
+#    learning_rate1,
+#    learning_rate2,
+#    gamma,
+#    askubuntu_question_map,
+#    android_question_map,
+#    display_callback,
+#    midpoint_eval)
 ##########
 ##########
 ##########
 
 
 ##########
-print
-print 'EVALUATION'
-print
-print 'Evaluation of askubuntu dev'
-evaluate.evaluate_model(
-    model,
-    encode_fn,
-    askubuntu_dev_samples,
-    askubuntu_question_map)
-print 'Evaluation of askubuntu test'
-evaluate.evaluate_model(
-    model,
-    encode_fn,
-    askubuntu_test_samples,
-    askubuntu_question_map)
-print 'Evaluation of android dev'
-evaluate.evaluate_model(
-    model,
-    encode_fn,
-    android_dev_samples,
-    android_question_map)
-print 'Evaluation of android test'
-evaluate.evaluate_model(
-    model,
-    encode_fn,
-    android_test_samples,
-    android_question_map)
+#print
+#print 'EVALUATION'
+#print
+#print 'Evaluation of askubuntu dev'
+#evaluate.evaluate_model(
+#    model,
+#    encode_fn,
+#    askubuntu_dev_samples,
+#    askubuntu_question_map)
+#print 'Evaluation of askubuntu test'
+#evaluate.evaluate_model(
+#    model,
+#    encode_fn,
+#    askubuntu_test_samples,
+#    askubuntu_question_map)
+#print 'Evaluation of android dev'
+#evaluate.evaluate_model(
+#    model,
+#    encode_fn,
+#    android_dev_samples,
+#    android_question_map)
+#print 'Evaluation of android test'
+#evaluate.evaluate_model(
+#    model,
+#    encode_fn,
+#    android_test_samples,
+#    android_question_map)

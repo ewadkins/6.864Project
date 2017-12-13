@@ -33,10 +33,17 @@ def init():
     print 'Loading android corpus..'
     android_question_map = utils.load_corpus('../data/android/corpus.tsv')
     print len(android_question_map)
+    
+    print 'Loading stop words..'
+    stop_words = utils.load_stop_words('../data/english_stop_words.txt')
+    print len(stop_words)
 
+    corpus_texts = map(lambda (t, b): t + ' ' + b,
+                       askubuntu_question_map.values() + android_question_map.values())
+    
     print 'Loading embeddings..'
     embedding_map = utils.load_embeddings(
-        '../data/pruned_askubuntu_android_vector.txt')
+        '../data/pruned_askubuntu_android_vector.txt', corpus_texts, stop_words)
     print len(embedding_map)
     print
 

@@ -37,7 +37,7 @@ def evaluate_model(net, encode, samples, question_map):
             results.append((1.0 - similarity, candidate_id))
 
         results.sort()
-        scores = map(lambda x: x[0], results)
+        scores = map(lambda x: 1.0 - x[0], results)
         results = map(lambda x: x[1], results)
         results_matrix.append(results)
         scores_matrix.append(scores)
@@ -61,7 +61,7 @@ def evaluate_model(net, encode, samples, question_map):
     return MAP, MRR, MPK1, MPK5, MAUC, AUC05
 
 
-def evaluate_bag_of_words(samples, question_map, vocabulary_map):
+def evaluate_directly(samples, encode_fn, question_map, util_map):
     samples = filter(lambda s: len(s.similar) > 0, samples)
     criterion = nn.CosineEmbeddingLoss()
 
@@ -87,9 +87,8 @@ def evaluate_bag_of_words(samples, question_map, vocabulary_map):
             candidate_title, candidate_body = question_map[candidate_id]
             candidate_text = transform(candidate_title, candidate_body)
 
-            encoded = encode.encode_bag_of_words(sample_text, vocabulary_map)
-            candidate_encoded = encode.encode_bag_of_words(
-                candidate_text, vocabulary_map)
+            encoded = encode_fn(sample_text, util_map)
+            candidate_encoded = encode_fn(candidate_text, util_map)
 
             # Compare similarity
             difference = criterion(
@@ -102,7 +101,7 @@ def evaluate_bag_of_words(samples, question_map, vocabulary_map):
 
         results.sort()
         # print results
-        scores = map(lambda x: x[0], results)
+        scores = map(lambda x: 1.0 - x[0], results)
         results = map(lambda x: x[1], results)
         # print results
         results_matrix.append(results)

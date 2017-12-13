@@ -17,10 +17,16 @@ def init():
     print 'Loading corpus..'
     question_map = utils.load_corpus('../data/askubuntu/text_tokenized.txt')
     print len(question_map)
+    
+    print 'Loading stop words..'
+    stop_words = utils.load_stop_words('../data/english_stop_words.txt')
+    print len(stop_words)
+        
+    corpus_texts = map(lambda (t, b): t + ' ' + b, question_map.values())
 
     print 'Loading embeddings..'
     embedding_map = utils.load_embeddings(
-        '../data/pruned_askubuntu_android_vector.txt')
+        '../data/pruned_askubuntu_android_vector.txt', corpus_texts, stop_words)
     print len(embedding_map)
     print
 

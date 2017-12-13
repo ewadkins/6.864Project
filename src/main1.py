@@ -47,7 +47,7 @@ class CNN(nn.Module):
         return x.squeeze(2)
 
 
-cnn_learning_rate = 1e-5
+cnn_learning_rate = 1e-1
 
 cnn = CNN()
 
@@ -63,7 +63,7 @@ losses = []
 
 def display_callback(loss):
     losses.append(loss)
-    if len(losses) % 5 == 0:
+    if len(losses) % 10 == 0:
         fig.clear()
         plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
@@ -84,13 +84,13 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 ##########
 ##########
 # Uncomment for part 1.2.2.1: CNN
-# model = cnn
-# encode_fn = encode.encode_cnn
-# optimizer = optim.Adam
-# learning_rate = cnn_learning_rate
-# batch_size = 1
-# num_batches = 12000
-# save_name = 'part_1_cnn.pt'
+model = cnn
+encode_fn = encode.encode_cnn
+optimizer = optim.Adam
+learning_rate = cnn_learning_rate
+batch_size = 20
+num_batches = 6000
+save_name = 'models/part_1_cnn.pt'
 ##########
 ##########
 ##########
@@ -100,31 +100,31 @@ training_samples, dev_samples, test_samples, question_map, embedding_map =\
 ##########
 ##########
 # Uncomment for part 1.2.2.2: LSTM
-model = lstm
-encode_fn = encode.encode_lstm
-optimizer = optim.SGD
-learning_rate = lstm_learning_rate
-batch_size = 10
-num_batches = 1200
-save_name = 'part_1_lstm.pt'
+#model = lstm
+#encode_fn = encode.encode_lstm
+#optimizer = optim.SGD
+#learning_rate = lstm_learning_rate
+#batch_size = 10
+#num_batches = 1200
+#save_name = 'part_1_lstm.pt'
 ##########
 ##########
 ##########
 
 
-model = torch.load('part_1_lstm.pt')
-print '\nMODEL LOADED\n'
+#model = torch.load('part_1_lstm_okay.pt')
+#print '\nMODEL LOADED\n'
 
 
 ##########
 # Trains models
 def midpoint_eval(batch):
-    if (batch + 1) % 50 == 0:
+    if (batch + 1) % 25 == 0:
         print 'Askubuntu dev'
         evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)
         print 'Askubuntu test'
         evaluate.evaluate_model(model, encode_fn, test_samples, question_map)
-        torch.save(model, save_name)
+        torch.save(model, save_name + str((batch + 1) * batch_size))
         print '\nMODEL SAVED\n'
         
 train.train(model, encode_fn, optimizer, training_samples,
@@ -133,11 +133,11 @@ train.train(model, encode_fn, optimizer, training_samples,
 
 torch.save(model, save_name)
 print '\nMODEL SAVED\n'
-
-print
-print 'EVALUATION'
-print
-print 'Askubuntu dev'
-evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)
-print 'Askubuntu test'
-evaluate.evaluate_model(model, encode_fn, test_samples, question_map)
+#
+#print
+#print 'EVALUATION'
+#print
+#print 'Askubuntu dev'
+#evaluate.evaluate_model(model, encode_fn, dev_samples, question_map)
+#print 'Askubuntu test'
+#evaluate.evaluate_model(model, encode_fn, test_samples, question_map)

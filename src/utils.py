@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 class Sample:
@@ -70,7 +71,10 @@ def load_corpus(filepath):
 # embeddings
 
 
-def load_embeddings(filepath):
+def load_embeddings(filepath, corpus_texts, stop_words):
+    cv = CountVectorizer(min_df=2, stop_words=stop_words)
+    cv.fit(corpus_texts)
+    vocabulary = set(cv.get_feature_names())
     with open(filepath, 'r') as f:
         embeddings = [line.strip() for line in f.readlines()]
         embeddings = map(
@@ -78,9 +82,15 @@ def load_embeddings(filepath):
                 lambda i_y1: float(
                     i_y1[1]) if i_y1[0] != 0 else i_y1[1], enumerate(
                     x.split())), embeddings)
-        return {x[0]: tuple(x[1:]) for x in embeddings}
+        return {x[0]: tuple(x[1:]) for x in embeddings if x[0] in vocabulary}
+    
+    
+def load_stop_words(filepath):
+    with open(filepath, 'r') as f:
+        stop_words = set([line.strip() for line in f.readlines()])
+        return stop_words
 
-
+    
 def store_embedding_map(_embedding_map):
     global embedding_map
     embedding_map = _embedding_map
@@ -94,8 +104,11 @@ def store_question_map(_question_map):
 # embedding_length)
 
 
-def get_embeddings(string):
-    return np.array(map(lambda x: embedding_map[x] if x in embedding_map else [
+def get_embeddings(string, _embedding_map=None):
+    global embedding_map
+    if _embedding_map is None:
+        _embedding_map = embedding_map
+    return np.array(map(lambda x: _embedding_map[x] if x in _embedding_map else [
                     0.0 for _ in range(200)], string.split()))
 
 

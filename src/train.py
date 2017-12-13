@@ -21,7 +21,7 @@ def train(net,
           callback=None):
 
     optimizer = optimizer(net.parameters(), lr=learning_rate)
-    criterion = nn.MultiMarginLoss()
+    criterion = nn.MultiMarginLoss(margin=0.2)
     similarity = nn.CosineSimilarity()
     for batch_num in range(num_batches):
         print (batch_num + 1) * batch_size, '/', num_batches * batch_size
@@ -71,7 +71,7 @@ def train_domain_transfer(net,
 
     optimizer1 = optimizer1(net.parameters(), lr=learning_rate1)
     optimizer2 = optimizer2(net.parameters(), lr=learning_rate2)
-    criterion1 = nn.MultiMarginLoss()
+    criterion1 = nn.MultiMarginLoss(margin=0.2)
     criterion2 = nn.CrossEntropyLoss()
     similarity = nn.CosineSimilarity()
     for batch_num in range(num_batches):

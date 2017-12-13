@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 from torch.autograd import Variable
+import numpy as np
 
 import utils
 
@@ -80,9 +81,28 @@ def encode_cnn_domain(net, q_id, question_map):
     return title
 
 
-def encode_bag_of_words(string, vocabulary_map):
-    encoded = [0.0] * len(vocabulary_map)
+def encode_tfidf_bag_of_word_booleans(string, tfidf):
+    encoded = tfidf.transform([string])
+    return Variable(torch.FloatTensor(encoded.toarray()[0]))
+
+
+def encode_bag_of_word_booleans(string, vocabulary_map):
+    encoded = [0] * len(vocabulary_map)
+    for word in string.split():
+        if word in vocabulary_map:
+            encoded[vocabulary_map[word]] = 1
+    return Variable(torch.FloatTensor(encoded))
+
+
+def encode_bag_of_word_counts(string, vocabulary_map):
+    encoded = [0] * len(vocabulary_map)
     for word in string.split():
         if word in vocabulary_map:
             encoded[vocabulary_map[word]] += 1
+    return Variable(torch.FloatTensor(encoded))
+
+
+def encode_mean_embeddings(string, embedding_map):
+    embeddings = utils.get_embeddings(string, embedding_map)
+    encoded = np.mean(embeddings, axis=0)
     return Variable(torch.FloatTensor(encoded))
