@@ -2,6 +2,7 @@
 \usepackage[margin=1in]{geometry} 
 \usepackage{amsmath,amsthm,amssymb,amsfonts}
 \usepackage{enumitem}
+\usepackage[table]{xcolor}
 
 \newenvironment{problem}[2][Problem]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2:}]}{\end{trivlist}}
@@ -14,18 +15,112 @@
 %\date{}
 \maketitle
 
+\section{Temporary Dumbass Way to Organize Data}
+	%\emph{Note: All non-heuristic encoders are trained only on AskUbuntu training data.}
+	\begin{center}
+%		\begin{tabular}{|c||c|c|c|c||c|c|c|c|}
+%			\hline
+%			\cellcolor{gray!15}
+%				& \multicolumn{4}{c||}{\cellcolor{gray!15}AskUbuntu Dev}
+%				& \multicolumn{4}{c|}{\cellcolor{gray!15}AskUbuntu Test} \\ \hline
+%			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+%				& \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5} \\ \hline\hline
+%			\cellcolor{red!15}Bag-of-word-booleans* & 0.480 & 0.598 & 0.450 & 0.375 & 0.466 & 0.598 & 0.441 & 0.349 \\ \hline
+%			\cellcolor{red!15}Bag-of-word-counts* & 0.459 & 0.561 & 0.386 & 0.363 & 0.468 & 0.612 & 0.468 & 0.357 \\ \hline
+%			\cellcolor{red!15}Mean embeddings* & 0.457 & 0.554 & 0.397 & 0.360 & 0.450 & 0.583 & 0.425 & 0.349 \\ \hline\hline
+%			\cellcolor{green!15}CNN & 0.532 & 0.631 & 0.481 & 0.408 & 0.555 & 0.692 & 0.548 & 0.430 \\ \hline
+%			\cellcolor{green!15}LSTM & 0.526 & 0.681 & 0.561 & 0.413 & 0.508 & 0.609 & 0.452 & 0.394 \\ \hline
+%		\end{tabular}
+%		\begin{tabular}{|c||c|c|c|c||c|c|c|c|c|c|c|c|}
+%			\hline
+%			\cellcolor{gray!15}
+%				& \multicolumn{6}{c||}{\cellcolor{gray!15}AskUbuntu Dev}
+%				& \multicolumn{6}{c|}{\cellcolor{gray!15}AskUbuntu Test} \\ \hline
+%			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+%				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)}
+%				& \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+%				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
+%			\cellcolor{red!15}Bag-of-word-booleans* & 0.480 & 0.598 & 0.450 & 0.375 &  &  & 0.466 & 0.598 & 0.441 & 0.349 &  &  \\ \hline
+%			\cellcolor{red!15}Bag-of-word-counts* & 0.459 & 0.561 & 0.386 & 0.363 &  &  & 0.468 & 0.612 & 0.468 & 0.357 &  &  \\ \hline
+%			\cellcolor{red!15}Mean embeddings* & 0.457 & 0.554 & 0.397 & 0.360 &  &  & 0.450 & 0.583 & 0.425 & 0.349 &  &  \\ \hline\hline
+%			\cellcolor{green!15}CNN & 0.532 & 0.631 & 0.481 & 0.408 &  &  & 0.555 & 0.692 & 0.548 & 0.430 &  &  \\ \hline
+%			\cellcolor{green!15}LSTM & 0.526 & 0.681 & 0.561 & 0.413 &  &  & 0.508 & 0.609 & 0.452 & 0.394 &  &  \\ \hline
+%		\end{tabular}
+%		~\\~\\
+%		\begin{tabular}{|c||c|c|c|c||c|c|c|c|}
+%			\hline
+%			\cellcolor{gray!15}
+%				& \multicolumn{4}{c||}{\cellcolor{gray!15}Android Dev}
+%				& \multicolumn{4}{c|}{\cellcolor{gray!15}Android Test} \\ \hline
+%			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+%				& \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5} \\ \hline\hline
+%			\cellcolor{red!15}Bag-of-word-booleans* & 0.332 & 0.337 & 0.227 & 0.090 & 0.351 & 0.355 & 0.238 & 0.095 \\ \hline
+%			\cellcolor{red!15}Bag-of-word-counts* & 0.296 & 0.300 & 0.206 & 0.074 & 0.316 & 0.321 & 0.220 & 0.084 \\ \hline
+%			\cellcolor{red!15}Mean embeddings* & 0.325 & 0.327 & 0.218 & 0.086 & 0.334 & 0.339 & 0.232 & 0.088 \\ \hline\hline
+%			\cellcolor{green!15}CNN** & 0.386 & 0.388 & 0.270 & 0.101 & 0.394 & 0.397 & 0.281 & 0.103 \\ \hline
+%			\cellcolor{green!15}LSTM** & 0.279 & 0.282 & 0.190 & 0.072 & 0.317 & 0.321 & 0.231 & 0.079 \\ \hline
+%		\end{tabular}
+%		~\\~\\
+		\begin{tabular}{|c||c|c|c|c||c|c|}
+			\hline
+			\cellcolor{gray!15}
+				& \multicolumn{6}{c|}{\cellcolor{gray!15}AskUbuntu Dev} \\ \hline
+			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
+			\cellcolor{red!15}Bag-of-word-booleans* & 0.480 & 0.598 & 0.450 & 0.375 & 0.515 & 0.121 \\ \hline
+			\cellcolor{red!15}Bag-of-word-counts* & 0.459 & 0.561 & 0.386 & 0.363 & 0.503 & 0.088 \\ \hline
+			\cellcolor{red!15}Mean embeddings* & 0.457 & 0.554 & 0.397 & 0.360 & 0.518 & 0.040 \\ \hline\hline
+			\cellcolor{green!15}CNN & 0.532 & 0.631 & 0.481 & 0.408 & 0.576 & 0.059 \\ \hline
+			\cellcolor{green!15}LSTM & 0.526 & 0.681 & 0.561 & 0.413 & 0.564 & 0.067 \\ \hline
+			\hline
+			\cellcolor{gray!15}
+				& \multicolumn{6}{c|}{\cellcolor{gray!15}AskUbuntu Test} \\ \hline
+			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
+			\cellcolor{red!15}Bag-of-word-booleans* & 0.466 & 0.598 & 0.441 & 0.349 & 0.546 & 0.125 \\ \hline
+			\cellcolor{red!15}Bag-of-word-counts* & 0.468 & 0.612 & 0.468 & 0.357 & 0.534 & 0.094 \\ \hline
+			\cellcolor{red!15}Mean embeddings* & 0.450 & 0.583 & 0.425 & 0.349 & 0.522 & 0.051 \\ \hline\hline
+			\cellcolor{green!15}CNN & 0.555 & 0.692 & 0.548 & 0.430 & 0.597 & 0.061 \\ \hline
+			\cellcolor{green!15}LSTM & 0.508 & 0.609 & 0.452 & 0.394 & 0.563 & 0.057 \\ \hline
+			\hline
+			\cellcolor{gray!15}
+				& \multicolumn{6}{c|}{\cellcolor{gray!15}Android Dev} \\ \hline
+			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
+			\cellcolor{red!15}Bag-of-word-booleans* & 0.332 & 0.337 & 0.227 & 0.090 & 0.819 & 0.270 \\ \hline
+			\cellcolor{red!15}Bag-of-word-counts* & 0.296 & 0.300 & 0.206 & 0.074 & 0.786 & 0.176 \\ \hline
+			\cellcolor{red!15}Mean embeddings* & 0.325 & 0.327 & 0.218 & 0.086 & 0.797 & 0.172 \\ \hline\hline
+			\cellcolor{green!15}CNN** & 0.386 & 0.388 & 0.270 & 0.101 & 0.869 & 0.231 \\ \hline
+			\cellcolor{green!15}LSTM** & 0.279 & 0.282 & 0.190 & 0.072 & 0.759 & 0.155 \\ \hline
+			\hline
+			\cellcolor{gray!15}
+				& \multicolumn{6}{c|}{\cellcolor{gray!15}Android Test} \\ \hline
+			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
+			\cellcolor{red!15}Bag-of-word-booleans* & 0.351 & 0.355 & 0.238 & 0.095 & 0.841 & 0.290 \\ \hline
+			\cellcolor{red!15}Bag-of-word-counts* & 0.316 & 0.321 & 0.220 & 0.084 & 0.794 & 0.172 \\ \hline
+			\cellcolor{red!15}Mean embeddings* & 0.334 & 0.339 & 0.232 & 0.088 & 0.810 & 0.179 \\ \hline\hline
+			\cellcolor{green!15}CNN** & 0.394 & 0.397 & 0.281 & 0.103 & 0.860 & 0.219 \\ \hline
+			\cellcolor{green!15}LSTM** & 0.317 & 0.321 & 0.231 & 0.079 & 0.775 & 0.187 \\ \hline
+		\end{tabular}
+	\end{center}
+	* Heuristic encoder (no learning involved, uses only evaluation data in evaluation) \\\\
+	** No transfer learning is used. The models are trained only on the labeled AskUbuntu training data.
+
 \section{Question Retrieval}
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 \subsection{CNN}
-	\begin{equation}
-		\begin{tabular}{|c|c|c|c|c|}
-			\hline
-			& \textbf{MAP} & \textbf{MRR} & \textbf{P@1} & \textbf{P@5} \\ \hline
-			\textbf{CNN} & 0.555 & 0.692 & 0.548 & 0.430 \\ \hline
-		\end{tabular}
-	\end{equation}
-			
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 \subsection{LSTM}
