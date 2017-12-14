@@ -15,7 +15,6 @@
 %\date{}
 \maketitle
 
-\section{Temporary Dumbass Way to Organize Data}
 	%\emph{Note: All non-heuristic encoders are trained only on AskUbuntu training data.}
 	\begin{center}
 %		\begin{tabular}{|c||c|c|c|c||c|c|c|c|}
@@ -130,13 +129,31 @@
 	** No transfer learning is used. The models are trained only on the labeled AskUbuntu training data.
 
 \section{Question Retrieval}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+For the semi-supervised task of question retrieval, we've implemented two models to act as question encoders: a CNN and an LSTM.
 
-\subsection{CNN}
+\subsection{CNN Encoder}
+The CNN consists of a single 1-dimensional convolutional layer, with an input of size 200 (the embedding length) and an output vector of size 667 (as used in \_\_\_), followed by a mean pooling layer. The convolutional layer outputs a state vector for each word of the input sequence. B the length of the input sequence is variable, we average the state vectors together using the aforementioned mean pooling layer, giving us a final vector representation of the entire sequence.
+
+\subsection{LSTM Encoder}
+The LSTM model we utilize is, more specifically, a single layer bidirectional LSTM. Similar to the CNN model described above, the LSTM layer outputs a variable number of state vectors. We average these together through the use of a mean pooling layer to arrive at the final encoding for the input sequence.
+
+\subsection{Encoding Process}
+We determined that the best method of encoding a question, which consists of a question title and a question body, is to encode the two sequences individually, and then average the two encodings. In the rare case that a question body is not provided for a given training sample, we use only the encoded title as the question encoding.\\
+
+We found this method to be an improvement over other encoding methods, such as concatenating the title and body and encoding the combined sequence. In the case of this example, our chosen method was superior likely because of the variable length of the question title, which results in no fixed title-body boundary in a combined input sequence.\\
+
+Also, as expected, using only one of the title or body as a representation of the question results in significantly decreased performance, as the model is limited to a single context, rather than the unique contexts presented in the titles and bodies of questions (titles tend to be a more concise description of the problem, but often miss many details; and bodies generally contain all relevant details, but also contain much extraneous information).
+
+\subsection{Learning Procedure}
+We train both models in the same manner. For each of the labeled AskUbuntu training sample questions, we select one similar question and 20 candidate questions, and encode all 22 questions using the encoding process described above. Next, we calculate the cosine similarity between the encodings of the sample question and the similar question, and the sample question and the 20 candidate questions. Finally, using PyTorch's MultiMarginLoss function, we calculate the loss and then update the model using the Adam optimizer. We also included the ability to train on batches (to reduce the volatility of the training process) -- updating the model on the combined loss of the entire batch, rather than after each individual sample.\\
+
+Both models were trained with a learning rate of 0.1. We also chose to use a margin of 0.2 for the MultiMarginLoss. Without the use of a margin, we saw drastically reduced performance in both models, likely due to a lack of normalization.
+
+\subsection{Results}
+Put a table here...\\
+
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-\subsection{LSTM}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 \section{Transfer Learning}
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
