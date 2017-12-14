@@ -50,72 +50,95 @@
 %			\cellcolor{green!15}LSTM & 0.526 & 0.681 & 0.561 & 0.413 &  &  & 0.508 & 0.609 & 0.452 & 0.394 &  &  \\ \hline
 %		\end{tabular}
 %		~\\~\\
-%		\begin{tabular}{|c||c|c|c|c||c|c|c|c|}
+		\begin{tabular}{|c||c|c|c|c||c|c|c|c|}
+			\hline
+			\cellcolor{gray!15}
+				& \multicolumn{4}{c||}{\cellcolor{gray!15}AskUbuntu Dev}
+				& \multicolumn{4}{c|}{\cellcolor{gray!15}AskUbuntu Test} \\ \hline
+			\cellcolor{gray!15}\textbf{Encoder}
+				& \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+				& \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5} \\ \hline\hline
+			\cellcolor{red!15}Bag-of-word-booleans* & 0.480 & 0.598 & 0.450 & 0.375 & 0.466 & 0.598 & 0.441 & 0.349 \\ \hline
+			\cellcolor{red!15}Bag-of-word-counts* & 0.459 & 0.561 & 0.386 & 0.363 & 0.468 & 0.612 & 0.468 & 0.357 \\ \hline
+			\cellcolor{red!15}Mean embeddings* & 0.457 & 0.554 & 0.397 & 0.360 & 0.450 & 0.583 & 0.425 & 0.349 \\ \hline
+			\cellcolor{red!15}TF-IDF BOW* & 0.538 & 0.683 & 0.540 & 0.436 & 0.555 & 0.686 & 0.538 & 0.405 \\ \hline\hline
+			\cellcolor{green!15}CNN & 0.560 & 0.691 & 0.566 & 0.432 & 0.577 & 0.722 & 0.608 & 0.435 \\ \hline
+			\cellcolor{green!15}LSTM & 0.526 & 0.681 & 0.561 & 0.413 & 0.508 & 0.609 & 0.452 & 0.394 \\ \hline
+		\end{tabular}
+%		\begin{tabular}{|c||c|c|c|c||c|c|}
 %			\hline
 %			\cellcolor{gray!15}
-%				& \multicolumn{4}{c||}{\cellcolor{gray!15}Android Dev}
-%				& \multicolumn{4}{c|}{\cellcolor{gray!15}Android Test} \\ \hline
-%			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
-%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+%				& \multicolumn{6}{c|}{\cellcolor{gray!15}AskUbuntu Dev} \\ \hline
+%			\cellcolor{gray!15}\textbf{Encoder}
 %				& \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
-%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5} \\ \hline\hline
-%			\cellcolor{red!15}Bag-of-word-booleans* & 0.332 & 0.337 & 0.227 & 0.090 & 0.351 & 0.355 & 0.238 & 0.095 \\ \hline
-%			\cellcolor{red!15}Bag-of-word-counts* & 0.296 & 0.300 & 0.206 & 0.074 & 0.316 & 0.321 & 0.220 & 0.084 \\ \hline
-%			\cellcolor{red!15}Mean embeddings* & 0.325 & 0.327 & 0.218 & 0.086 & 0.334 & 0.339 & 0.232 & 0.088 \\ \hline\hline
-%			\cellcolor{green!15}CNN** & 0.386 & 0.388 & 0.270 & 0.101 & 0.394 & 0.397 & 0.281 & 0.103 \\ \hline
-%			\cellcolor{green!15}LSTM** & 0.279 & 0.282 & 0.190 & 0.072 & 0.317 & 0.321 & 0.231 & 0.079 \\ \hline
+%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+%				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
+%			\cellcolor{red!15}BOW-booleans* & 0.480 & 0.598 & 0.450 & 0.375 & 0.515 & 0.121 \\ \hline
+%			\cellcolor{red!15}BOW-counts* & 0.459 & 0.561 & 0.386 & 0.363 & 0.503 & 0.088 \\ \hline
+%			\cellcolor{red!15}Mean embeddings* & 0.457 & 0.554 & 0.397 & 0.360 & 0.518 & 0.040 \\ \hline
+%			\cellcolor{red!15}TF-IDF BOW* & 0.538 & 0.683 & 0.540 & 0.436 & 0.579 & 0.093 \\ \hline\hline
+%			\cellcolor{green!15}CNN & 0.560 & 0.691 & 0.566 & 0.432 & 0.595 & 0.068 \\ \hline
+%			\cellcolor{green!15}LSTM & 0.526 & 0.681 & 0.561 & 0.413 & 0.564 & 0.067 \\ \hline
+%			\hline
+%			\cellcolor{gray!15}
+%				& \multicolumn{6}{c|}{\cellcolor{gray!15}AskUbuntu Test} \\ \hline
+%			\cellcolor{gray!15}\textbf{Encoder}
+%				& \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+%				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
+%			\cellcolor{red!15}BOW-booleans* & 0.466 & 0.598 & 0.441 & 0.349 & 0.546 & 0.125 \\ \hline
+%			\cellcolor{red!15}BOW-counts* & 0.468 & 0.612 & 0.468 & 0.357 & 0.534 & 0.094 \\ \hline
+%			\cellcolor{red!15}Mean embeddings* & 0.450 & 0.583 & 0.425 & 0.349 & 0.522 & 0.051 \\ \hline
+%			\cellcolor{red!15}TF-IDF BOW* & 0.555 & 0.686 & 0.538 & 0.405 & 0.612 & 0.107 \\ \hline\hline
+%			\cellcolor{green!15}CNN & 0.577 & 0.722 & 0.608 & 0.435 & 0.613 & 0.078 \\ \hline
+%			\cellcolor{green!15}LSTM & 0.508 & 0.609 & 0.452 & 0.394 & 0.563 & 0.057 \\ \hline
 %		\end{tabular}
-%		~\\~\\
-		\begin{tabular}{|c||c|c|c|c||c|c|}
+		~\\~\\
+		\begin{tabular}{|c||c|c||c|c|}
 			\hline
 			\cellcolor{gray!15}
-				& \multicolumn{6}{c|}{\cellcolor{gray!15}AskUbuntu Dev} \\ \hline
-			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
-				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+				& \multicolumn{2}{c||}{\cellcolor{gray!15}Android Dev}
+				& \multicolumn{2}{c|}{\cellcolor{gray!15}Android Test} \\ \hline
+			\cellcolor{gray!15}\textbf{Encoder}
+				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)}
 				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
-			\cellcolor{red!15}BOW-booleans* & 0.480 & 0.598 & 0.450 & 0.375 & 0.515 & 0.121 \\ \hline
-			\cellcolor{red!15}BOW-counts* & 0.459 & 0.561 & 0.386 & 0.363 & 0.503 & 0.088 \\ \hline
-			\cellcolor{red!15}Mean embeddings* & 0.457 & 0.554 & 0.397 & 0.360 & 0.518 & 0.040 \\ \hline
-			\cellcolor{red!15}TF-IDF BOW* & 0.538 & 0.683 & 0.540 & 0.436 & 0.579 & 0.093 \\ \hline\hline
-			\cellcolor{green!15}CNN & 0.560 & 0.691 & 0.566 & 0.432 & 0.595 & 0.068 \\ \hline
-			\cellcolor{green!15}LSTM & 0.526 & 0.681 & 0.561 & 0.413 & 0.564 & 0.067 \\ \hline
-			\hline
-			\cellcolor{gray!15}
-				& \multicolumn{6}{c|}{\cellcolor{gray!15}AskUbuntu Test} \\ \hline
-			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
-				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
-				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
-			\cellcolor{red!15}BOW-booleans* & 0.466 & 0.598 & 0.441 & 0.349 & 0.546 & 0.125 \\ \hline
-			\cellcolor{red!15}BOW-counts* & 0.468 & 0.612 & 0.468 & 0.357 & 0.534 & 0.094 \\ \hline
-			\cellcolor{red!15}Mean embeddings* & 0.450 & 0.583 & 0.425 & 0.349 & 0.522 & 0.051 \\ \hline
-			\cellcolor{red!15}TF-IDF BOW* & 0.555 & 0.686 & 0.538 & 0.405 & 0.612 & 0.107 \\ \hline\hline
-			\cellcolor{green!15}CNN & 0.577 & 0.722 & 0.608 & 0.435 & 0.613 & 0.078 \\ \hline
-			\cellcolor{green!15}LSTM & 0.508 & 0.609 & 0.452 & 0.394 & 0.563 & 0.057 \\ \hline
-			\hline
-			\cellcolor{gray!15}
-				& \multicolumn{6}{c|}{\cellcolor{gray!15}Android Dev} \\ \hline
-			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
-				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
-				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
-			\cellcolor{red!15}BOW-booleans* & 0.404 & 0.409 & 0.298 & 0.105 & 0.870 & 0.349 \\ \hline
-			\cellcolor{red!15}BOW-counts* & 0.379 & 0.384 & 0.285 & 0.099 & 0.827 & 0.226 \\ \hline
-			\cellcolor{red!15}Mean embeddings* & 0.403 & 0.407 & 0.293 & 0.103 & 0.839 & 0.225 \\ \hline
-			\cellcolor{red!15}TF-IDF BOW* & 0.714 & 0.719 & 0.610 & 0.174 & 0.963 & 0.707 \\ \hline\hline
-			\cellcolor{green!15}CNN** & 0.450 & 0.454 & 0.347 & 0.114 & 0.892 & 0.278 \\ \hline
-			\cellcolor{green!15}LSTM** & 0.279 & 0.282 & 0.190 & 0.072 & 0.759 & 0.155 \\ \hline
-			\hline
-			\cellcolor{gray!15}
-				& \multicolumn{6}{c|}{\cellcolor{gray!15}Android Test} \\ \hline
-			\cellcolor{gray!15}\textbf{Encoder} & \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
-				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
-				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
-			\cellcolor{red!15}BOW-booleans* & 0.452 & 0.457 & 0.338 & 0.118 & 0.884 & 0.378 \\ \hline
-			\cellcolor{red!15}BOW-counts* & 0.409 & 0.413 & 0.314 & 0.103 & 0.828 & 0.225 \\ \hline
-			\cellcolor{red!15}Mean embeddings* & 0.415 & 0.419 & 0.311 & 0.105 & 0.846 & 0.222 \\ \hline
-			\cellcolor{red!15}TF-IDF BOW* & 0.744 & 0.750 & 0.647 & 0.178 & 0.965 & 0.739 \\ \hline\hline
-			\cellcolor{green!15}CNN** & 0.485 & 0.488 & 0.371 & 0.122 & 0.901 & 0.350 \\ \hline
-			\cellcolor{green!15}LSTM** & 0.317 & 0.321 & 0.231 & 0.079 & 0.775 & 0.187 \\ \hline
+			\cellcolor{red!15}Bag-of-word-booleans* & 0.870 & 0.349 & 0.884 & 0.378 \\ \hline
+			\cellcolor{red!15}Bag-of-word-counts* & 0.827 & 0.226 & 0.828 & 0.225 \\ \hline
+			\cellcolor{red!15}Mean embeddings* & 0.839 & 0.225 & 0.846 & 0.222 \\ \hline
+			\cellcolor{red!15}TF-IDF BOW* & 0.963 & 0.707 & 0.965 & 0.739 \\ \hline\hline
+			\cellcolor{green!15}CNN** & 0.892 & 0.278 & 0.901 & 0.350 \\ \hline
+			\cellcolor{green!15}LSTM** & 0.759 & 0.155 & 0.775 & 0.187 \\ \hline
 		\end{tabular}
+%		\begin{tabular}{|c||c|c|c|c||c|c|}
+%			\hline
+%			\cellcolor{gray!15}
+%				& \multicolumn{6}{c|}{\cellcolor{gray!15}Android Dev} \\ \hline
+%			\cellcolor{gray!15}\textbf{Encoder}
+%				& \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+%				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
+%			\cellcolor{red!15}BOW-booleans* & 0.404 & 0.409 & 0.298 & 0.105 & 0.870 & 0.349 \\ \hline
+%			\cellcolor{red!15}BOW-counts* & 0.379 & 0.384 & 0.285 & 0.099 & 0.827 & 0.226 \\ \hline
+%			\cellcolor{red!15}Mean embeddings* & 0.403 & 0.407 & 0.293 & 0.103 & 0.839 & 0.225 \\ \hline
+%			\cellcolor{red!15}TF-IDF BOW* & 0.714 & 0.719 & 0.610 & 0.174 & 0.963 & 0.707 \\ \hline\hline
+%			\cellcolor{green!15}CNN** & 0.450 & 0.454 & 0.347 & 0.114 & 0.892 & 0.278 \\ \hline
+%			\cellcolor{green!15}LSTM** & 0.279 & 0.282 & 0.190 & 0.072 & 0.759 & 0.155 \\ \hline
+%			\hline
+%			\cellcolor{gray!15}
+%				& \multicolumn{6}{c|}{\cellcolor{gray!15}Android Test} \\ \hline
+%			\cellcolor{gray!15}\textbf{Encoder}
+%				& \cellcolor{gray!15}\textbf{MAP} & \cellcolor{gray!15}\textbf{MRR}
+%				& \cellcolor{gray!15}\textbf{P@1} & \cellcolor{gray!15}\textbf{P@5}
+%				& \cellcolor{gray!15}\textbf{AUC} & \cellcolor{gray!15}\textbf{AUC(0.05)} \\ \hline\hline
+%			\cellcolor{red!15}BOW-booleans* & 0.452 & 0.457 & 0.338 & 0.118 & 0.884 & 0.378 \\ \hline
+%			\cellcolor{red!15}BOW-counts* & 0.409 & 0.413 & 0.314 & 0.103 & 0.828 & 0.225 \\ \hline
+%			\cellcolor{red!15}Mean embeddings* & 0.415 & 0.419 & 0.311 & 0.105 & 0.846 & 0.222 \\ \hline
+%			\cellcolor{red!15}TF-IDF BOW* & 0.744 & 0.750 & 0.647 & 0.178 & 0.965 & 0.739 \\ \hline\hline
+%			\cellcolor{green!15}CNN** & 0.485 & 0.488 & 0.371 & 0.122 & 0.901 & 0.350 \\ \hline
+%			\cellcolor{green!15}LSTM** & 0.317 & 0.321 & 0.231 & 0.079 & 0.775 & 0.187 \\ \hline
+%		\end{tabular}
 	\end{center}
 	* Heuristic encoder (no learning involved, uses only evaluation data in evaluation) \\\\
 	** Direct transfer -- No transfer learning is used. The models are trained only on the labeled AskUbuntu training data.
