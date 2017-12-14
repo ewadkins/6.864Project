@@ -41,11 +41,11 @@ def load_samples_stupid_format(pos_filepath, neg_filepath):
     pos_map = {}
     neg_map = {}
     with open(pos_filepath, 'r') as f:
-        content = [line.strip() for line in f.readlines()]
+        content = [line.strip().lower() for line in f.readlines()]
         for pair in map(lambda x: tuple(x.split()), content):
             pos_map[pair[0]] = pos_map.get(pair[0], []) + [pair[1]]
     with open(neg_filepath, 'r') as f:
-        content = [line.strip() for line in f.readlines()]
+        content = [line.strip().lower() for line in f.readlines()]
         for pair in map(lambda x: tuple(x.split()), content):
             neg_map[pair[0]] = neg_map.get(pair[0], []) + [pair[1]]
 
@@ -62,7 +62,7 @@ def load_samples_stupid_format(pos_filepath, neg_filepath):
 
 def load_corpus(filepath):
     with open(filepath, 'r') as f:
-        corpus = [line.strip() for line in f.readlines()]
+        corpus = [line.strip().lower() for line in f.readlines()]
         corpus = map(lambda x: x.split('\t'), corpus)
         return {x[0]: tuple(x[1:] + ([''] * max(0, 3 - len(x))))
                 for x in corpus}

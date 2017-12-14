@@ -163,14 +163,14 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 # Uncomment for part 2.3.1.a.2.1: Evaluate bag of word booleans on Android dataset
-#question_map = android_question_map
-#samples1 = android_dev_samples
-#samples2 = android_test_samples
-#vocabulary_map = utils.get_vocabulary_map(question_map)
-#print 'Bag of word booleans evaluation android dev:'
-#evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
-#print 'Bag of word booleans evaluation android test:'
-#evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
+question_map = android_question_map
+samples1 = android_dev_samples
+samples2 = android_test_samples
+vocabulary_map = utils.get_vocabulary_map(question_map)
+print 'Bag of word booleans evaluation android dev:'
+evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
+print 'Bag of word booleans evaluation android test:'
+evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
 ##########
 ##########
 ##########
@@ -180,14 +180,14 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 # Uncomment for part 2.3.1.a.2.2: Evaluate bag of word counts on Android dataset
-#question_map = android_question_map
-#samples1 = android_dev_samples
-#samples2 = android_test_samples
-#vocabulary_map = utils.get_vocabulary_map(question_map)
-#print 'Bag of word counts evaluation android dev:'
-#evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
-#print 'Bag of word counts evaluation android test:'
-#evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
+question_map = android_question_map
+samples1 = android_dev_samples
+samples2 = android_test_samples
+vocabulary_map = utils.get_vocabulary_map(question_map)
+print 'Bag of word counts evaluation android dev:'
+evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
+print 'Bag of word counts evaluation android test:'
+evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
 ##########
 ##########
 ##########
@@ -197,14 +197,14 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 # Uncomment for part 2.3.1.a.2.3: Evaluate mean embeddings on Android dataset
-#question_map = android_question_map
-#samples1 = android_dev_samples
-#samples2 = android_test_samples
-#vocabulary_map = utils.get_vocabulary_map(question_map)
-#print 'Mean embeddings evaluation android dev:'
-#evaluate.evaluate_directly(samples1, encode.encode_mean_embeddings, question_map, embedding_map)
-#print 'Mean embeddings evaluation android test:'
-#evaluate.evaluate_directly(samples2, encode.encode_mean_embeddings, question_map, embedding_map)
+question_map = android_question_map
+samples1 = android_dev_samples
+samples2 = android_test_samples
+vocabulary_map = utils.get_vocabulary_map(question_map)
+print 'Mean embeddings evaluation android dev:'
+evaluate.evaluate_directly(samples1, encode.encode_mean_embeddings, question_map, embedding_map)
+print 'Mean embeddings evaluation android test:'
+evaluate.evaluate_directly(samples2, encode.encode_mean_embeddings, question_map, embedding_map)
 ##########
 ##########
 ##########
@@ -214,15 +214,15 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 # Uncomment for part 2.3.1.b.1: Train on askubuntu, no transfer learning
-model = lstm
-encode_fn = encode.encode_lstm
-optimizer = optim.Adam
-learning_rate = lstm_learning_rate
-batch_size = 10
-num_batches = 100
-
-model = torch.load('part_1_lstm_good.pt')
-print '\nMODEL LOADED\n'
+#model = lstm
+#encode_fn = encode.encode_lstm
+#optimizer = optim.Adam
+#learning_rate = lstm_learning_rate
+#batch_size = 10
+#num_batches = 100
+#
+#model = torch.load('part_1_lstm_good.pt')
+#print '\nMODEL LOADED\n'
 
 #def midpoint_eval(batch):
 #    if (batch + 1) % 25 == 0:
@@ -295,30 +295,30 @@ print '\nMODEL LOADED\n'
 
 
 ##########
-print
-print 'EVALUATION'
-print
-print 'Evaluation of askubuntu dev'
-evaluate.evaluate_model(
-    model,
-    encode_fn,
-    askubuntu_dev_samples,
-    askubuntu_question_map)
-print 'Evaluation of askubuntu test'
-evaluate.evaluate_model(
-    model,
-    encode_fn,
-    askubuntu_test_samples,
-    askubuntu_question_map)
-print 'Evaluation of android dev'
-evaluate.evaluate_model(
-    model,
-    encode_fn,
-    android_dev_samples,
-    android_question_map)
-print 'Evaluation of android test'
-evaluate.evaluate_model(
-    model,
-    encode_fn,
-    android_test_samples,
-    android_question_map)
+#print
+#print 'EVALUATION'
+#print
+#print 'Evaluation of askubuntu dev'
+#evaluate.evaluate_model(
+#    model,
+#    encode_fn,
+#    askubuntu_dev_samples,
+#    askubuntu_question_map)
+#print 'Evaluation of askubuntu test'
+#evaluate.evaluate_model(
+#    model,
+#    encode_fn,
+#    askubuntu_test_samples,
+#    askubuntu_question_map)
+#print 'Evaluation of android dev'
+#evaluate.evaluate_model(
+#    model,
+#    encode_fn,
+#    android_dev_samples,
+#    android_question_map)
+#print 'Evaluation of android test'
+#evaluate.evaluate_model(
+#    model,
+#    encode_fn,
+#    android_test_samples,
+#    android_question_map)
