@@ -214,15 +214,15 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 # Uncomment for part 2.3.1.b.1: Train on askubuntu, no transfer learning
-#model = cnn
-#encode_fn = encode.encode_cnn
-#optimizer = optim.Adam
-#learning_rate = cnn_learning_rate
-#batch_size = 10
-#num_batches = 100
-#
-#model = torch.load('part_1_cnn.pt39000')
-#print '\nMODEL LOADED\n'
+model = lstm
+encode_fn = encode.encode_lstm
+optimizer = optim.Adam
+learning_rate = lstm_learning_rate
+batch_size = 10
+num_batches = 100
+
+model = torch.load('part_1_lstm_good.pt')
+print '\nMODEL LOADED\n'
 
 #def midpoint_eval(batch):
 #    if (batch + 1) % 25 == 0:
@@ -295,30 +295,30 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 
 
 ##########
-#print
-#print 'EVALUATION'
-#print
-#print 'Evaluation of askubuntu dev'
-#evaluate.evaluate_model(
-#    model,
-#    encode_fn,
-#    askubuntu_dev_samples,
-#    askubuntu_question_map)
-#print 'Evaluation of askubuntu test'
-#evaluate.evaluate_model(
-#    model,
-#    encode_fn,
-#    askubuntu_test_samples,
-#    askubuntu_question_map)
-#print 'Evaluation of android dev'
-#evaluate.evaluate_model(
-#    model,
-#    encode_fn,
-#    android_dev_samples,
-#    android_question_map)
-#print 'Evaluation of android test'
-#evaluate.evaluate_model(
-#    model,
-#    encode_fn,
-#    android_test_samples,
-#    android_question_map)
+print
+print 'EVALUATION'
+print
+print 'Evaluation of askubuntu dev'
+evaluate.evaluate_model(
+    model,
+    encode_fn,
+    askubuntu_dev_samples,
+    askubuntu_question_map)
+print 'Evaluation of askubuntu test'
+evaluate.evaluate_model(
+    model,
+    encode_fn,
+    askubuntu_test_samples,
+    askubuntu_question_map)
+print 'Evaluation of android dev'
+evaluate.evaluate_model(
+    model,
+    encode_fn,
+    android_dev_samples,
+    android_question_map)
+print 'Evaluation of android test'
+evaluate.evaluate_model(
+    model,
+    encode_fn,
+    android_test_samples,
+    android_question_map)

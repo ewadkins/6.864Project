@@ -79,8 +79,8 @@
 			\cellcolor{red!15}TF-IDF BOW* & 0.538 & 0.683 & 0.540 & 0.436 & 0.579 & 0.093 \\ \hline\hline
 %			\cellcolor{green!15}CNN & 0.532 & 0.631 & 0.481 & 0.408 & 0.576 & 0.059 \\ \hline
 %			\cellcolor{green!15}LSTM & 0.526 & 0.681 & 0.561 & 0.413 & 0.564 & 0.067 \\ \hline
-			\cellcolor{green!15}CNN &  &  &  &  &  &  \\ \hline
-			\cellcolor{green!15}LSTM &  &  &  &  &  &  \\ \hline
+			\cellcolor{green!15}CNN & 0.560 & 0.691 & 0.566 & 0.432 & 0.595 & 0.068 \\ \hline
+			\cellcolor{green!15}LSTM & 0.526 & 0.681 & 0.561 & 0.413 & 0.564 & 0.067 \\ \hline
 			\hline
 			\cellcolor{gray!15}
 				& \multicolumn{6}{c|}{\cellcolor{gray!15}AskUbuntu Test} \\ \hline
@@ -93,8 +93,8 @@
 			\cellcolor{red!15}TF-IDF BOW* & 0.555 & 0.686 & 0.538 & 0.405 & 0.612 & 0.107 \\ \hline\hline
 %			\cellcolor{green!15}CNN & 0.555 & 0.692 & 0.548 & 0.430 & 0.597 & 0.061 \\ \hline
 %			\cellcolor{green!15}LSTM & 0.508 & 0.609 & 0.452 & 0.394 & 0.563 & 0.057 \\ \hline
-			\cellcolor{green!15}CNN &  &  &  &  &  &  \\ \hline
-			\cellcolor{green!15}LSTM &  &  &  &  &  &  \\ \hline
+			\cellcolor{green!15}CNN & 0.577 & 0.722 & 0.608 & 0.435 & 0.613 & 0.078 \\ \hline
+			\cellcolor{green!15}LSTM & 0.508 & 0.609 & 0.452 & 0.394 & 0.563 & 0.057 \\ \hline
 			\hline
 			\cellcolor{gray!15}
 				& \multicolumn{6}{c|}{\cellcolor{gray!15}Android Dev} \\ \hline
@@ -107,8 +107,8 @@
 			\cellcolor{red!15}TF-IDF BOW* & 0.714 & 0.719 & 0.610 & 0.174 & 0.963 & 0.707 \\ \hline\hline
 %			\cellcolor{green!15}CNN** & 0.386 & 0.388 & 0.270 & 0.101 & 0.869 & 0.231 \\ \hline
 %			\cellcolor{green!15}LSTM** & 0.279 & 0.282 & 0.190 & 0.072 & 0.759 & 0.155 \\ \hline
-			\cellcolor{green!15}CNN** &  &  &  &  &  &  \\ \hline
-			\cellcolor{green!15}LSTM** &  &  &  &  &  &  \\ \hline
+			\cellcolor{green!15}CNN** & 0.450 & 0.454 & 0.347 & 0.114 & 0.892 & 0.278 \\ \hline
+			\cellcolor{green!15}LSTM** & 0.279 & 0.282 & 0.190 & 0.072 & 0.759 & 0.155 \\ \hline
 			\hline
 			\cellcolor{gray!15}
 				& \multicolumn{6}{c|}{\cellcolor{gray!15}Android Test} \\ \hline
@@ -121,12 +121,12 @@
 			\cellcolor{red!15}TF-IDF BOW* & 0.744 & 0.750 & 0.647 & 0.178 & 0.965 & 0.739 \\ \hline\hline
 %			\cellcolor{green!15}CNN** & 0.394 & 0.397 & 0.281 & 0.103 & 0.860 & 0.219 \\ \hline
 %			\cellcolor{green!15}LSTM** & 0.317 & 0.321 & 0.231 & 0.079 & 0.775 & 0.187 \\ \hline
-			\cellcolor{green!15}CNN** &  &  &  &  &  &  \\ \hline
-			\cellcolor{green!15}LSTM** &  &  &  &  &  &  \\ \hline
+			\cellcolor{green!15}CNN** & 0.485 & 0.488 & 0.371 & 0.122 & 0.901 & 0.350 \\ \hline
+			\cellcolor{green!15}LSTM** & 0.317 & 0.321 & 0.231 & 0.079 & 0.775 & 0.187 \\ \hline
 		\end{tabular}
 	\end{center}
 	* Heuristic encoder (no learning involved, uses only evaluation data in evaluation) \\\\
-	** No transfer learning is used. The models are trained only on the labeled AskUbuntu training data.
+	** Direct transfer -- No transfer learning is used. The models are trained only on the labeled AskUbuntu training data.
 
 \section{Question Retrieval}
 For the semi-supervised task of question retrieval, we've implemented two models to act as question encoders: a CNN and an LSTM.
@@ -143,6 +143,9 @@ We determined that the best method of encoding a question, which consists of a q
 We found this method to be an improvement over other encoding methods, such as concatenating the title and body and encoding the combined sequence. In the case of this example, our chosen method was superior likely because of the variable length of the question title, which results in no fixed title-body boundary in a combined input sequence.\\
 
 Also, as expected, using only one of the title or body as a representation of the question results in significantly decreased performance, as the model is limited to a single context, rather than the unique contexts presented in the titles and bodies of questions (titles tend to be a more concise description of the problem, but often miss many details; and bodies generally contain all relevant details, but also contain much extraneous information).
+
+\subsection{Embeddings}
+Talk about pruning of embeddings using CountVectorizer.
 
 \subsection{Learning Procedure}
 We train both models in the same manner. For each of the labeled AskUbuntu training sample questions, we select one similar question and 20 candidate questions, and encode all 22 questions using the encoding process described above. Next, we calculate the cosine similarity between the encodings of the sample question and the similar question, and the sample question and the 20 candidate questions. Finally, using PyTorch's MultiMarginLoss function, we calculate the loss and then update the model using the Adam optimizer. We also included the ability to train on batches (to reduce the volatility of the training process) -- updating the model on the combined loss of the entire batch, rather than after each individual sample.\\

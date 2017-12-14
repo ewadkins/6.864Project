@@ -72,7 +72,7 @@ def load_corpus(filepath):
 
 
 def load_embeddings(filepath, corpus_texts, stop_words):
-    cv = CountVectorizer(min_df=2, stop_words=stop_words)
+    cv = CountVectorizer(min_df=1, stop_words=stop_words)
     cv.fit(corpus_texts)
     vocabulary = set(cv.get_feature_names())
     with open(filepath, 'r') as f:
@@ -82,7 +82,7 @@ def load_embeddings(filepath, corpus_texts, stop_words):
                 lambda i_y1: float(
                     i_y1[1]) if i_y1[0] != 0 else i_y1[1], enumerate(
                     x.split())), embeddings)
-        return {x[0]: tuple(x[1:]) for x in embeddings if x[0] in vocabulary}
+        return {x[0]: tuple(x[1:]) for x in embeddings if x[0] in vocabulary or True}
     
     
 def load_stop_words(filepath):
