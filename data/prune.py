@@ -1,7 +1,7 @@
 filepath = 'vectors_stackexchange.txt'
-relevant = ['askubuntu/text_tokenized.txt', 'android/corpus.tsv']
+relevant = ['android/corpus.tsv']  # ['askubuntu/text_tokenized.txt', 'android/corpus.tsv']
 
-target = 'pruned_askubuntu_android_vector.txt'
+target = 'pruned_android_vector.txt'
 
 relevant_set = set()
 for fp in relevant:
@@ -10,7 +10,7 @@ for fp in relevant:
             tmp = map(lambda x: x.split(), filter(bool, line.split('\t')[1:]))
             relevant_set |= set([word.lower() for sublist in tmp for word in sublist])
 
-            
+
 with open(filepath, 'r') as f:
     with open(target, 'a') as tf:
         for line in f:

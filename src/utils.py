@@ -63,7 +63,7 @@ def load_samples_stupid_format(pos_filepath, neg_filepath):
 def load_corpus(filepath):
     with open(filepath, 'r') as f:
         corpus = [line.strip() for line in f.readlines()]
-        corpus = map(lambda x: x.split('\t'), corpus)
+        corpus = map(lambda x: x.lower().split('\t'), corpus)
         return {x[0]: tuple(x[1:] + ([''] * max(0, 3 - len(x))))
                 for x in corpus}
 
@@ -72,7 +72,7 @@ def load_corpus(filepath):
 
 
 def load_embeddings(filepath, corpus_texts, stop_words):
-    cv = CountVectorizer(min_df=2, stop_words=stop_words)
+    cv = CountVectorizer(stop_words='english')  # token_pattern=r"(?u)\b\w+\b|!|[.,!?;:()\[\]{}]")  #stop_words='english') #min_df=2, stop_words=stop_words) # token_pattern=r"(?u)\b\w+\b|!|[.,!?;:()\[\]{}]")
     cv.fit(corpus_texts)
     vocabulary = set(cv.get_feature_names())
     with open(filepath, 'r') as f:
@@ -83,14 +83,14 @@ def load_embeddings(filepath, corpus_texts, stop_words):
                     i_y1[1]) if i_y1[0] != 0 else i_y1[1], enumerate(
                     x.split())), embeddings)
         return {x[0]: tuple(x[1:]) for x in embeddings if x[0] in vocabulary}
-    
-    
+
+
 def load_stop_words(filepath):
     with open(filepath, 'r') as f:
         stop_words = set([line.strip() for line in f.readlines()])
         return stop_words
 
-    
+
 def store_embedding_map(_embedding_map):
     global embedding_map
     embedding_map = _embedding_map
@@ -109,7 +109,7 @@ def get_embeddings(string, _embedding_map=None):
     if _embedding_map is None:
         _embedding_map = embedding_map
     return np.array(map(lambda x: _embedding_map[x] if x in _embedding_map else [
-                    0.0 for _ in range(200)], string.split()))
+        0.0 for _ in range(len(embedding_map['apple']))], string.split()))  # TODO: do not hard code embedding dim here
 
 
 def get_vocabulary_map(question_map):

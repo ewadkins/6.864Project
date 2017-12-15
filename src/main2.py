@@ -18,17 +18,22 @@ import domain_transfer
 
 #################################################
 # Plot configuration
+
+
 fig = plt.figure()
-
-losses = []
-
-
-def display_callback(loss):
-    losses.append(loss)
-    if len(losses) % 1 == 0:
+losses1 = []
+losses2 = []
+def display_callback(loss1, loss2):
+    losses1.append(loss1)
+    losses2.append(loss2)
+    if len(losses1)-1 % 10 == 0:
         fig.clear()
-        plt.plot(list(range(len(losses))), losses)
+        plt.subplot(211)
+        plt.plot(list(range(len(losses1))), losses1)
+        plt.subplot(212)
+        plt.plot(list(range(len(losses2))), losses2)
         plt.pause(0.0001)
+
 
 #################################################
 # LSTM configuration
@@ -66,7 +71,7 @@ class CNN(nn.Module):
 cnn_learning_rate = 1e-1
 
 cnn = CNN()
-
+#cnn = torch.load('auc_tuned_cnn.pt')
 print cnn
 print
 
@@ -209,90 +214,100 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 
-
+'''
 ##########
 ##########
 ##########
 # Uncomment for part 2.3.1.b.1: Train on askubuntu, no transfer learning
-#model = cnn
-#encode_fn = encode.encode_cnn
-#optimizer = optim.Adam
-#learning_rate = cnn_learning_rate
-#batch_size = 10
-#num_batches = 100
+model = cnn
+encode_fn = encode.encode_cnn
+optimizer = optim.Adam
+learning_rate = cnn_learning_rate
+batch_size = 20
+num_batches = 2000000
+save_name = 'transfer_models/preprocessed_vecs_transfer_cnn.pt'
 #
 #model = torch.load('part_1_cnn.pt39000')
 #print '\nMODEL LOADED\n'
-
-#def midpoint_eval(batch):
-#    if (batch + 1) % 25 == 0:
-#        print 'Evaluation of askubuntu dev'
-#        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples,
-#            askubuntu_question_map)
-#    if (batch + 1) % 100 == 0:
-#        print 'Evaluation of android dev'
-#        evaluate.evaluate_model(model, encode_fn, android_dev_samples,
-#            android_question_map)
 #
-#train.train(model, encode_fn, optimizer, askubuntu_training_samples,
-#            batch_size, num_batches, learning_rate,
-#            askubuntu_question_map, display_callback, midpoint_eval)
+def midpoint_eval(batch):
+    if (batch + 1) % 40 == 0:
+        print 'Evaluation of askubuntu dev'
+        evaluate.evaluate_model(model, encode_fn, askubuntu_dev_samples,
+            askubuntu_question_map)
+    if (batch + 1) % 40 == 0:
+        print 'Evaluation of android dev'
+        evaluate.evaluate_model(model, encode_fn, android_dev_samples[:100],
+            android_question_map)
+        torch.save(model, save_name + str((batch + 1) * batch_size))
+        print '\nMODEL SAVED\n'
+
+train.train(model, encode_fn, optimizer, askubuntu_training_samples,
+        batch_size, num_batches, learning_rate,
+        askubuntu_question_map, display_callback, midpoint_eval)
+##########
+##########
+##########
+'''
+
 ##########
 ##########
 ##########
 
-
-##########
-##########
-##########
 # Uncomment for part 2.3.3.1: Evaluate with domain transfer
-#model = cnn_domain_transfer_net
-#encode_fn = encode.encode_cnn
-#encode_domain_fn = encode.encode_cnn_domain
-#optimizer1 = optim.Adam
-#optimizer2 = optim.Adam
-#learning_rate1 = cnn_learning_rate
-#learning_rate2 = -1e-7
-#gamma = 1e-5
-#batch_size = 10
-#num_batches = 100
-#
-#def midpoint_eval(batch):
-#    if (batch + 1) % 25 == 0:
-#        print 'Evaluation of askubuntu dev'
-#        evaluate.evaluate_model(
-#            model,
-#            encode_fn,
-#            askubuntu_dev_samples,
-#            askubuntu_question_map)
-#    if (batch + 1) % 100 == 0:
-#        print 'Evaluation of android dev'
-#        evaluate.evaluate_model(
-#            model,
-#            encode_fn,
-#            android_dev_samples,
-#            android_question_map)
-#
-#train.train_domain_transfer(
-#    model,
-#    encode_fn,
-#    encode_domain_fn,
-#    optimizer1,
-#    optimizer2,
-#    askubuntu_training_samples,
-#    batch_size,
-#    num_batches,
-#    learning_rate1,
-#    learning_rate2,
-#    gamma,
-#    askubuntu_question_map,
-#    android_question_map,
-#    display_callback,
-#    midpoint_eval)
-##########
-##########
-##########
 
+model = cnn_domain_transfer_net
+#model = torch.load('transfer_models/preprocessed_vecs_transfer_cnn.pt8000')
+encode_fn = encode.encode_cnn
+encode_domain_fn = encode.encode_cnn_domain
+optimizer1 = optim.Adam
+optimizer2 = optim.Adam
+learning_rate1 = cnn_learning_rate
+learning_rate2 = 1e-1 #TODO: play with this
+gamma = 1e-6
+batch_size = 20
+num_batches = 2000000
+save_name = 'transfer_models/preprocessed_vecs_domain_transfer_cnn.pt'
+
+def midpoint_eval(batch):
+    if (batch) % 25 == 0:
+        print 'Evaluation of askubuntu dev'
+        evaluate.evaluate_model(
+            model,
+            encode_fn,
+            askubuntu_dev_samples,
+            askubuntu_question_map)
+    if (batch) % 25 == 0:
+        print 'Evaluation of android dev'
+        evaluate.evaluate_model(
+            model,
+            encode_fn,
+            android_dev_samples[:150],
+            android_question_map)
+        torch.save(model, save_name + str((batch + 1) * batch_size))
+        print '\nMODEL SAVED\n'
+
+
+train.train_domain_transfer(
+    model,
+    encode_fn,
+    encode_domain_fn,
+    optimizer1,
+    optimizer2,
+    askubuntu_training_samples,
+    batch_size,
+    num_batches,
+    learning_rate1,
+    learning_rate2,
+    gamma,
+    askubuntu_question_map,
+    android_question_map,
+    display_callback,
+    midpoint_eval)
+
+##########
+##########
+##########
 
 ##########
 #print
@@ -310,15 +325,15 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 #    encode_fn,
 #    askubuntu_test_samples,
 #    askubuntu_question_map)
-#print 'Evaluation of android dev'
-#evaluate.evaluate_model(
-#    model,
-#    encode_fn,
-#    android_dev_samples,
-#    android_question_map)
-#print 'Evaluation of android test'
-#evaluate.evaluate_model(
-#    model,
-#    encode_fn,
-#    android_test_samples,
-#    android_question_map)
+print 'Evaluation of android dev'
+evaluate.evaluate_model(
+    model,
+    encode_fn,
+    android_dev_samples,
+    android_question_map)
+print 'Evaluation of android test'
+evaluate.evaluate_model(
+    model,
+    encode_fn,
+    android_test_samples,
+    android_question_map)

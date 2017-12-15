@@ -112,7 +112,7 @@ save_name = 'models/part_1_cnn.pt'
 ##########
 
 
-#model = torch.load('part_1_lstm_okay.pt')
+model = torch.load('part_1_cnn_good.pt')
 #print '\nMODEL LOADED\n'
 
 
@@ -126,13 +126,14 @@ def midpoint_eval(batch):
         evaluate.evaluate_model(model, encode_fn, test_samples, question_map)
         torch.save(model, save_name + str((batch + 1) * batch_size))
         print '\nMODEL SAVED\n'
-        
+'''  
 train.train(model, encode_fn, optimizer, training_samples,
             batch_size, num_batches, learning_rate,
             question_map, display_callback, midpoint_eval)
-
-torch.save(model, save_name)
-print '\nMODEL SAVED\n'
+'''
+midpoint_eval(24)
+#torch.save(model, save_name)
+#print '\nMODEL SAVED\n'
 #
 #print
 #print 'EVALUATION'

@@ -43,7 +43,7 @@ def init():
     
     print 'Loading embeddings..'
     embedding_map = utils.load_embeddings(
-        '../data/pruned_askubuntu_android_vector.txt', corpus_texts, stop_words)
+        '../data/pruned_android_vector.txt', corpus_texts, stop_words)  # pruned_askubuntu_android_vector.txt
     print len(embedding_map)
     print
 

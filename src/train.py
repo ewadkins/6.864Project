@@ -21,11 +21,15 @@ def train(net,
           callback=None):
 
     optimizer = optimizer(net.parameters(), lr=learning_rate)
-    criterion = nn.MultiMarginLoss(margin=0.2)
+    criterion = nn.MultiMarginLoss(margin=0.3)
     similarity = nn.CosineSimilarity()
+    def next_batch(batch_size, training_samples, batch_num):
+        start_index = (batch_num * batch_size) % (len(training_samples) - batch_size)
+        print 'batch index: ', start_index
+        return training_samples[start_index:start_index+batch_size]
     for batch_num in range(num_batches):
         print (batch_num + 1) * batch_size, '/', num_batches * batch_size
-        batch = np.random.choice(training_samples, batch_size)
+        batch = next_batch(batch_size, training_samples, batch_num)
         sample_similarities = []
         for sample in batch:
             q = encode(net, sample.id, question_map)
@@ -71,7 +75,7 @@ def train_domain_transfer(net,
 
     optimizer1 = optimizer1(net.parameters(), lr=learning_rate1)
     optimizer2 = optimizer2(net.parameters(), lr=learning_rate2)
-    criterion1 = nn.MultiMarginLoss(margin=0.2)
+    criterion1 = nn.MultiMarginLoss(margin=0.3)
     criterion2 = nn.CrossEntropyLoss()
     similarity = nn.CosineSimilarity()
     for batch_num in range(num_batches):
@@ -112,13 +116,13 @@ def train_domain_transfer(net,
         optimizer2.zero_grad()
         loss1 = criterion1(sample_similarities, sample_targets)
         loss2 = criterion2(encoded, targets)
-        loss = loss1 - gamma * loss2
-        loss.backward()
+        loss1.backward()
+        loss2.backward()
         optimizer1.step()
         optimizer2.step()
 
         if display_callback:
-            display_callback(loss.data[0])
+            display_callback(loss1.data[0], loss2.data[0])
         if callback:
             callback(batch_num)
 
