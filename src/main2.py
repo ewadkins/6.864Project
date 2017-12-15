@@ -168,14 +168,14 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 # Uncomment for part 2.3.1.a.2.1: Evaluate bag of word booleans on Android dataset
-#question_map = android_question_map
-#samples1 = android_dev_samples
-#samples2 = android_test_samples
-#vocabulary_map = utils.get_vocabulary_map(question_map)
-#print 'Bag of word booleans evaluation android dev:'
-#evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
-#print 'Bag of word booleans evaluation android test:'
-#evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
+question_map = android_question_map
+samples1 = android_dev_samples
+samples2 = android_test_samples
+vocabulary_map = utils.get_vocabulary_map(question_map)
+print 'Bag of word booleans evaluation android dev:'
+evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
+print 'Bag of word booleans evaluation android test:'
+evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_booleans, question_map, vocabulary_map)
 ##########
 ##########
 ##########
@@ -185,14 +185,14 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 # Uncomment for part 2.3.1.a.2.2: Evaluate bag of word counts on Android dataset
-#question_map = android_question_map
-#samples1 = android_dev_samples
-#samples2 = android_test_samples
-#vocabulary_map = utils.get_vocabulary_map(question_map)
-#print 'Bag of word counts evaluation android dev:'
-#evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
-#print 'Bag of word counts evaluation android test:'
-#evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
+question_map = android_question_map
+samples1 = android_dev_samples
+samples2 = android_test_samples
+vocabulary_map = utils.get_vocabulary_map(question_map)
+print 'Bag of word counts evaluation android dev:'
+evaluate.evaluate_directly(samples1, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
+print 'Bag of word counts evaluation android test:'
+evaluate.evaluate_directly(samples2, encode.encode_bag_of_word_counts, question_map, vocabulary_map)
 ##########
 ##########
 ##########
@@ -202,14 +202,14 @@ cnn_domain_transfer_net = domain_transfer.DomainTransferNet(feature_extractor)
 ##########
 ##########
 # Uncomment for part 2.3.1.a.2.3: Evaluate mean embeddings on Android dataset
-#question_map = android_question_map
-#samples1 = android_dev_samples
-#samples2 = android_test_samples
-#vocabulary_map = utils.get_vocabulary_map(question_map)
-#print 'Mean embeddings evaluation android dev:'
-#evaluate.evaluate_directly(samples1, encode.encode_mean_embeddings, question_map, embedding_map)
-#print 'Mean embeddings evaluation android test:'
-#evaluate.evaluate_directly(samples2, encode.encode_mean_embeddings, question_map, embedding_map)
+question_map = android_question_map
+samples1 = android_dev_samples
+samples2 = android_test_samples
+vocabulary_map = utils.get_vocabulary_map(question_map)
+print 'Mean embeddings evaluation android dev:'
+evaluate.evaluate_directly(samples1, encode.encode_mean_embeddings, question_map, embedding_map)
+print 'Mean embeddings evaluation android test:'
+evaluate.evaluate_directly(samples2, encode.encode_mean_embeddings, question_map, embedding_map)
 ##########
 ##########
 ##########
@@ -227,7 +227,7 @@ batch_size = 20
 num_batches = 2000000
 save_name = 'transfer_models/preprocessed_vecs_transfer_cnn.pt'
 #
-#model = torch.load('part_1_cnn.pt39000')
+#model = torch.load('part_1_lstm_good.pt')
 #print '\nMODEL LOADED\n'
 #
 def midpoint_eval(batch):

@@ -41,11 +41,11 @@ def load_samples_stupid_format(pos_filepath, neg_filepath):
     pos_map = {}
     neg_map = {}
     with open(pos_filepath, 'r') as f:
-        content = [line.strip() for line in f.readlines()]
+        content = [line.strip().lower() for line in f.readlines()]
         for pair in map(lambda x: tuple(x.split()), content):
             pos_map[pair[0]] = pos_map.get(pair[0], []) + [pair[1]]
     with open(neg_filepath, 'r') as f:
-        content = [line.strip() for line in f.readlines()]
+        content = [line.strip().lower() for line in f.readlines()]
         for pair in map(lambda x: tuple(x.split()), content):
             neg_map[pair[0]] = neg_map.get(pair[0], []) + [pair[1]]
 
@@ -62,9 +62,9 @@ def load_samples_stupid_format(pos_filepath, neg_filepath):
 
 def load_corpus(filepath):
     with open(filepath, 'r') as f:
-        corpus = [line.strip() for line in f.readlines()]
-        corpus = map(lambda x: x.lower().split('\t'), corpus)
-        return {x[0]: tuple(x[1:] + ([''] * max(0, 3 - len(x))))
+        corpus = [line.strip().lower() for line in f.readlines()]
+        corpus = map(lambda x: x.split('\t'), corpus)
+    return {x[0]: tuple(x[1:] + ([''] * max(0, 3 - len(x))))
                 for x in corpus}
 
 # Returns a dictionary mapping words to their 200-dimension pre-trained
@@ -82,7 +82,7 @@ def load_embeddings(filepath, corpus_texts, stop_words):
                 lambda i_y1: float(
                     i_y1[1]) if i_y1[0] != 0 else i_y1[1], enumerate(
                     x.split())), embeddings)
-        return {x[0]: tuple(x[1:]) for x in embeddings if x[0] in vocabulary}
+        return {x[0]: tuple(x[1:]) for x in embeddings if x[0] in vocabulary or True}
 
 
 def load_stop_words(filepath):
