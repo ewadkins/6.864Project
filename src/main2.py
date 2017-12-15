@@ -26,13 +26,12 @@ losses2 = []
 def display_callback(loss1, loss2):
     losses1.append(loss1)
     losses2.append(loss2)
-    if len(losses1)-1 % 10 == 0:
+    if len(losses1) % 1 == 0:
         fig.clear()
         plt.subplot(211)
         plt.plot(list(range(len(losses1))), losses1)
         plt.subplot(212)
         plt.plot(list(range(len(losses2))), losses2)
-        plt.pause(0.0001)
 
 
 #################################################
