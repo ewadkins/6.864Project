@@ -62,8 +62,8 @@ def load_samples_stupid_format(pos_filepath, neg_filepath):
 
 def load_corpus(filepath):
     with open(filepath, 'r') as f:
-        corpus = [line.strip().lower() for line in f.readlines()]
-        corpus = map(lambda x: x.split('\t'), corpus)
+        corpus = [line.strip() for line in f.readlines()]
+        corpus = map(lambda x: x.lower().split('\t'), corpus)
     return {x[0]: tuple(x[1:] + ([''] * max(0, 3 - len(x))))
                 for x in corpus}
 
@@ -72,9 +72,6 @@ def load_corpus(filepath):
 
 
 def load_embeddings(filepath, corpus_texts, stop_words):
-    cv = CountVectorizer(stop_words='english')  # token_pattern=r"(?u)\b\w+\b|!|[.,!?;:()\[\]{}]")  #stop_words='english') #min_df=2, stop_words=stop_words) # token_pattern=r"(?u)\b\w+\b|!|[.,!?;:()\[\]{}]")
-    cv.fit(corpus_texts)
-    vocabulary = set(cv.get_feature_names())
     with open(filepath, 'r') as f:
         embeddings = [line.strip() for line in f.readlines()]
         embeddings = map(

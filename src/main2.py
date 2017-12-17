@@ -26,12 +26,20 @@ losses2 = []
 def display_callback(loss1, loss2):
     losses1.append(loss1)
     losses2.append(loss2)
-    if len(losses1) % 1 == 0:
+    if len(losses1) % 10 == 0:
         fig.clear()
         plt.subplot(211)
         plt.plot(list(range(len(losses1))), losses1)
         plt.subplot(212)
         plt.plot(list(range(len(losses2))), losses2)
+        plt.pause(0.0001)
+
+losses = []
+def display_callback1(loss):
+    losses.append(loss)
+    if len(losses) % 10 == 0:
+        fig.clear()
+        plt.plot(list(range(len(losses))), losses)
         plt.pause(0.0001)
 
 
@@ -67,11 +75,10 @@ class CNN(nn.Module):
         x = F.avg_pool1d(x, x.size()[-1])
         return x.squeeze(2)
 
-
 cnn_learning_rate = 1e-1
 
 cnn = CNN()
-#cnn = torch.load('auc_tuned_cnn.pt')
+#cnn = torch.load('auc_tuned_cnn.pt') #'transfer_models/preprocessed_vecs_transfer_cnn.pt15220')
 print cnn
 print
 
@@ -295,7 +302,6 @@ lstm_domain_transfer_net = domain_transfer.LSTMDomainTransferNet(lstm)
 ##########
 
 # Uncomment for part 2.3.3.1: Evaluate with domain transfer
-
 #model = lstm_domain_transfer_net
 ##model = torch.load('transfer_models/preprocessed_vecs_transfer_cnn.pt8000')
 #encode_fn = encode.encode_lstm
@@ -329,7 +335,6 @@ lstm_domain_transfer_net = domain_transfer.LSTMDomainTransferNet(lstm)
 #            android_question_map)
 #        torch.save(model, save_name + str((batch + 1) * batch_size))
 #        print '\nMODEL SAVED\n'
-
 
 #train.train_domain_transfer(
 #    model,
