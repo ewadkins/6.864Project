@@ -90,7 +90,7 @@ def evaluate_directly(samples, encode_fn, question_map, util_map):
             encoded = encode_fn(sample_text, util_map)
             candidate_encoded = encode_fn(candidate_text, util_map)
 
-            # Compare similarity
+            # Compare difference
             difference = criterion(
                 encoded.unsqueeze(0),
                 candidate_encoded.unsqueeze(0),
@@ -100,10 +100,8 @@ def evaluate_directly(samples, encode_fn, question_map, util_map):
             results.append((difference, candidate_id))
 
         results.sort()
-        # print results
         scores = map(lambda x: 1.0 - x[0], results)
         results = map(lambda x: x[1], results)
-        # print results
         results_matrix.append(results)
         scores_matrix.append(scores)
 
@@ -233,12 +231,3 @@ def mean_area_under_curve_fpr(samples, results_matrix, scores_matrix, max_fpr):
         max_fpr)
 
 
-# training_samples = utils.load_samples('../data/train_random.txt')
-
-# samples = [training_samples[0], training_samples[1]]
-# results = [[training_samples[0].dissimilar[0]] + training_samples[0].similar
-#                + \
-#                training_samples[0].dissimilar[1:],
-#           training_samples[1].similar + training_samples[1].dissimilar]
-
-# print mean_average_precision(samples, results)

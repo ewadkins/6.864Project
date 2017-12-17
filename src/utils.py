@@ -82,7 +82,7 @@ def load_embeddings(filepath, corpus_texts, stop_words):
                 lambda i_y1: float(
                     i_y1[1]) if i_y1[0] != 0 else i_y1[1], enumerate(
                     x.split())), embeddings)
-        return {x[0]: tuple(x[1:]) for x in embeddings if x[0] in vocabulary or True}
+        return {x[0]: tuple(x[1:]) for x in embeddings if x[0] in vocabulary}
 
 
 def load_stop_words(filepath):

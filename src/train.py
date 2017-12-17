@@ -25,7 +25,6 @@ def train(net,
     similarity = nn.CosineSimilarity()
     def next_batch(batch_size, training_samples, batch_num):
         start_index = (batch_num * batch_size) % (len(training_samples) - batch_size)
-        print 'batch index: ', start_index
         return training_samples[start_index:start_index+batch_size]
     for batch_num in range(num_batches):
         print (batch_num + 1) * batch_size, '/', num_batches * batch_size
@@ -125,28 +124,3 @@ def train_domain_transfer(net,
             display_callback(loss1.data[0], loss2.data[0])
         if callback:
             callback(batch_num)
-
-#        if (i+1) % 1 == 0:
-#            for _ in range(5):
-#                encoded = []
-#                targets_list = []
-#                for _ in range(1):
-#                    question_id1 = np.random.choice(
-#                                      list(question_map1.keys()))
-#                    question_id2 = np.random.choice(
-#                                      list(question_map2.keys()))
-#                    targets = Variable(torch.LongTensor([0, 1]))
-#                    encoded1 = encode_domain(net, get_embeddings(
-#                                                       *question_map1[question_id1]))
-#                    encoded2 = encode_domain(net, get_embeddings(
-#                                                      *question_map2[question_id2]))
-#                    encoded.append(encoded1)
-#                    encoded.append(encoded2)
-#                    targets_list.append(targets)
-#
-#                optimizer.zero_grad()
-#                input = torch.cat(encoded).view(2*n, 2)
-#                targets = torch.cat(targets_list)
-#                loss = cross_entropy_loss(input, targets)
-#                loss.backward()
-#                optimizer.step()
